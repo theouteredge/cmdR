@@ -5,9 +5,9 @@ using System.Text;
 
 namespace cmdR.Exceptions
 {
-    public class ToManyRoutesFound : Exception
+    public class ToManyRoutesFoundException : Exception
     {
-        public ToManyRoutesFound(string message) : base(message)
+        public ToManyRoutesFoundException(string message) : base(message)
         {
         }
     }

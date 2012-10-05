@@ -5,9 +5,9 @@ using System.Text;
 
 namespace cmdR.Exceptions
 {
-    public class NoRouteFound : Exception
+    public class InvalidRouteException : Exception
     {
-        public NoRouteFound(string message) : base(message)
+        public InvalidRouteException(string message) : base(message)
         {
         }
     }

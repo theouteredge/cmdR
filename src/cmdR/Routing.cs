@@ -11,15 +11,13 @@ namespace cmdR
     {
         private readonly IParseCommands _commandParser;
         
-        public readonly List<Route> Routes { get; private set; }
+        public List<Route> Routes { get; private set; }
 
 
-        public Routing(IParseCommands commandParser)
+        public void RegisterRoute(string name, IDictionary<string, bool> parameters, Action<IDictionary<string, string>> action)
         {
-            this.Routes = new List<Route>();
-            _commandParser = commandParser;
+            this.Routes.Add(new Route(name, parameters, action));
         }
-
 
         public void RigisterRoute(Route route)
         {
@@ -27,25 +25,16 @@ namespace cmdR
         }
 
 
-        private IDictionary<string, string> ParseCommand(string command, out string commandName)
+        public Route FindRoute(string commandName, IDictionary<string, string> parameters)
         {
-            return _commandParser.Parse(command, out commandName);
-        }
-
-
-        public Route FindRoute(string command)
-        {
-            var commandName = "";
-            var parameters = ParseCommand(command, out commandName);
-
             var paramName = parameters.Select(x => x.Key).ToList();
             var routes = this.Routes.Where(x => x.Name == commandName && x.Match(paramName)).ToList();
 
             if (routes.Count == 0)
-                throw new NoRoutesFound(string.Format("No routes where found which match the parameter list: {0}", string.Join(",", paramName)));
+                throw new NoRouteFoundException(string.Format("No routes where found which match the parameter list: {0}", string.Join(",", paramName)));
 
             if (routes.Count > 1)
-                throw new ToManyRoutesFound(string.Format("{0} routes where found which matched the parameter list {2}, matched routes {1}", routes.Count, string.Join(",", routes.Select(x => x.Name))));
+                throw new ToManyRoutesFoundException(string.Format("{0} routes where found which matched the parameter list {2}, matched routes {1}", routes.Count, string.Join(",", routes.Select(x => x.Name))));
 
             return routes[0];
         }

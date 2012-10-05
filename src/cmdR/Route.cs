@@ -5,16 +5,18 @@ using System.Text;
 
 namespace cmdR
 {
-    public class Route
+    public class Route : IRoute
     {
         public string Name { get; set; }
-        public IDictionary<string, bool> ParametersToTake { get; set; }
-        public Action<IDictionary<string, string>> Action { get; set; }
+        
+        private IDictionary<string, bool> ParametersToTake { get; set; }
+        private Action<IDictionary<string, string>> Action { get; set; }
 
-        public Route(IDictionary<string, bool> parameterToTake, Action<IDictionary<string, string>> invoke)
+        public Route(string name, IDictionary<string, bool> parameters, Action<IDictionary<string, string>> action)
         {
-            ParametersToTake = parameterToTake;
-            Action = invoke;
+            this.Name = name;
+            this.ParametersToTake = parameters;
+            this.Action = action;
         }
 
         public bool Match(List<string> paramNames)

@@ -7,6 +7,7 @@ namespace cmdR
 {
     public interface IRouteCommands
     {
-        Route FindRoute(string commandName, IDictionary<string, string> command);
+        void RegisterRoute(string commandName, IDictionary<string, bool> parameters, Action<IDictionary<string, string>> action);
+        Route FindRoute(string commandName, IDictionary<string, string> parameters);
     }
 }

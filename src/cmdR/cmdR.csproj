@@ -39,8 +39,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Abstract\IParseCommands.cs" />
+    <Compile Include="Abstract\IRouteCommands.cs" />
+    <Compile Include="CmdR.cs" />
+    <Compile Include="Exceptions\NoRouteFoundException.cs" />
+    <Compile Include="Exceptions\ToManyRoutesFoundException.cs" />
+    <Compile Include="Exceptions\InvalidRouteException.cs" />
+    <Compile Include="IParseRoutes.cs" />
+    <Compile Include="IRoute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Route.cs" />
+    <Compile Include="Routing.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
