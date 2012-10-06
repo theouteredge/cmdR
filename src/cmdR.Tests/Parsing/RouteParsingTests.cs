@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using cmdR.Exceptions;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -123,6 +124,38 @@ namespace cmdR.Tests.Parsing
 
             Assert.AreEqual("path", param.Skip(1).Take(1).Single().Key);
             Assert.AreEqual(ParameterType.Required, param.Skip(1).Take(1).Single().Value);
+        }
+
+        [Test]
+        public void Parse_RouteWithOneRequiredAndOneOptinalParameters()
+        {
+            // Arrange
+            var parser = new RouteParser();
+            var commandName = "";
+
+            // Act
+            var param = parser.Parse("ls filter path?", out commandName);
+
+            // Assert
+            Assert.AreEqual(2, param.Count);
+
+            Assert.AreEqual("filter", param.First().Key);
+            Assert.AreEqual(ParameterType.Required, param.First().Value);
+
+            Assert.AreEqual("path", param.Skip(1).Take(1).Single().Key);
+            Assert.AreEqual(ParameterType.Optional, param.Skip(1).Take(1).Single().Value);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidRouteException))]
+        public void Parse_RouteWithOneRequiredAndOneOptinalInTheWrongOrder()
+        {
+            // Arrange
+            var parser = new RouteParser();
+            var commandName = "";
+
+            // Act
+            var param = parser.Parse("ls filter? path", out commandName);
         }
     }
 }

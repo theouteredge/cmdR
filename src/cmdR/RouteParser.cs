@@ -1,5 +1,6 @@
 ﻿using cmdR.Abstract;
 using cmdR.Exceptions;
+using cmdR.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,52 @@ namespace cmdR
                 throw new InvalidRouteException("the round does not have any parts, you have to supply at least a command name");
 
             commandName = routeparts.Take(1).Single();
-            return ConvertToParameterDictionary(routeparts.Skip(1));
+            var param = ConvertToParameterDictionary(routeparts.Skip(1));
+
+            this.ValidateParameterOrdering(param);
+
+            return param;
+        }
+
+        private void ValidateParameterOrdering(IDictionary<string, ParameterType> param)
+        {
+            // ensure that there are no optional parameters before required parameters
+            var lastRequired = LastRequiredParameter(param);
+            var firstOptional = FirstOptionalParameter(param);
+
+            if (firstOptional != -1 && firstOptional < lastRequired)
+                throw new InvalidRouteException("Optional parameters are not allowed before required parameters");
+        }
+
+        private int LastRequiredParameter(IDictionary<string, ParameterType> param)
+        {
+            var i = 0;
+            var index = -1;
+            
+            foreach (var p in param)
+            {
+                if (p.Value == ParameterType.Required)
+                    index = i;
+
+                i++;
+            }
+
+            return index;
+        }
+
+        private int FirstOptionalParameter(IDictionary<string, ParameterType> param)
+        {
+            var i = 0;
+            
+            foreach (var p in param)
+            {
+                if (p.Value == ParameterType.Optional)
+                    return i;
+
+                i++;
+            }
+
+            return -1;
         }
 
         private IDictionary<string, ParameterType> ConvertToParameterDictionary(IEnumerable<string> parameters)
@@ -35,11 +81,5 @@ namespace cmdR
 
             return result;
         }
-    }
-
-    public enum ParameterType
-    {
-        Required,
-        Optional
     }
 }

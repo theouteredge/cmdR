@@ -48,7 +48,9 @@
     <Compile Include="Exceptions\InvalidCommandException.cs" />
     <Compile Include="Abstract\IRoute.cs" />
     <Compile Include="Abstract\IParseRoutes.cs" />
+    <Compile Include="Extensions\IEnumeralExtensions.cs" />
     <Compile Include="KeyValueCommandParser.cs" />
+    <Compile Include="ParameterType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="RouteParser.cs" />
