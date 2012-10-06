@@ -1,4 +1,5 @@
-﻿using cmdR.Exceptions;
+﻿using cmdR.Abstract;
+using cmdR.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace cmdR
         public List<Route> Routes { get; private set; }
 
 
-        public void RegisterRoute(string name, IDictionary<string, bool> parameters, Action<IDictionary<string, string>> action)
+        public void RegisterRoute(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>> action)
         {
             this.Routes.Add(new Route(name, parameters, action));
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cmdR.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,11 @@ namespace cmdR
     public class Route : IRoute
     {
         public string Name { get; set; }
-        
-        private IDictionary<string, bool> ParametersToTake { get; set; }
+
+        private IDictionary<string, ParameterType> ParametersToTake { get; set; }
         private Action<IDictionary<string, string>> Action { get; set; }
 
-        public Route(string name, IDictionary<string, bool> parameters, Action<IDictionary<string, string>> action)
+        public Route(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>> action)
         {
             this.Name = name;
             this.ParametersToTake = parameters;
@@ -22,7 +23,7 @@ namespace cmdR
         public bool Match(List<string> paramNames)
         {
             // does the amount of required params meet the params we where expecting?
-            if (paramNames.Count != this.ParametersToTake.Where(x => x.Value).Count())
+            if (paramNames.Count != this.ParametersToTake.Where(x => x.Value == ParameterType.Required).Count())
                 return false;
 
             // check to see if we where expecing all the params which where passed in
@@ -33,7 +34,7 @@ namespace cmdR
             }
 
             // check to see if all the required params where passed in
-            foreach (var requiredParam in ParametersToTake.Where(x => x.Value).Select(x => x.Key))
+            foreach (var requiredParam in ParametersToTake.Where(x => x.Value == ParameterType.Required).Select(x => x.Key))
             {
                 if (!paramNames.Contains(requiredParam))
                     return false;

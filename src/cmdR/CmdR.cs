@@ -1,4 +1,5 @@
-﻿using cmdR.Exceptions;
+﻿using cmdR.Abstract;
+using cmdR.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace cmdR
     {
         private IParseCommands _commandParser;
         private IRouteCommands _commandRouter;
+        private IParseRoutes _routeParser;
 
         private readonly string[] _exitcodes = new[] { "exit" };
         private readonly string _cmdPrompt;
@@ -27,7 +29,7 @@ namespace cmdR
             _commandRouter = new Routing();
         }
 
-        public CmdR(IParseCommands parser, IRouteCommands routing, string[] exitcodes = null, string cmdPrompt = "> ")
+        public CmdR(IParseCommands parser, IRouteCommands routing, IParseRoutes _routeParser, string[] exitcodes = null, string cmdPrompt = "> ")
         {
             if (exitcodes != null)
                 _exitcodes = exitcodes;
@@ -45,10 +47,8 @@ namespace cmdR
                 throw new InvalidRouteException(string.Format("The route is invalid", route));
 
 
-            var routeparts = route.Split(' ').Where(x => !string.IsNullOrEmpty(x));
-
-            var name = routeparts.Take(1).Single();
-            var parameters = ConvertToParameterDictionary(routeparts.Skip(1));
+            var name = "";
+            var parameters = _routeParser.Parse(route, out name);
 
             _commandRouter.RegisterRoute(name, parameters, action);
         }
@@ -80,23 +80,6 @@ namespace cmdR
                 command = Console.ReadLine();
             }
             while (!_exitcodes.Contains(command));
-        }
-
-
-
-        private IDictionary<string, bool> ConvertToParameterDictionary(IEnumerable<string> parameters)
-        {
-            var result = new Dictionary<string, bool>();
-            foreach (var param in parameters)
-            {
-                // params with a question mark at the end are optional
-                if (param.Last() == '?')
-                    result.Add(param, false);
-                else
-                    result.Add(param.Substring(0, param.Length - 1), true);
-            }
-
-            return result;
         }
     }
 }

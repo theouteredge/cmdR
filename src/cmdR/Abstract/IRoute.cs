@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-namespace cmdR
+
+namespace cmdR.Abstract
 {
     interface IRoute
     {
