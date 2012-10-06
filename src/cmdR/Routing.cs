@@ -9,8 +9,6 @@ namespace cmdR
 {
     public class Routing : IRouteCommands
     {
-        private readonly IParseCommands _commandParser;
-        
         public List<Route> Routes { get; private set; }
 
 

@@ -15,13 +15,26 @@ namespace cmdR
         private readonly string[] _exitcodes = new[] { "exit" };
         private readonly string _cmdPrompt;
 
+
         
-        public CmdR(string[] exitcodes = null, string cmdPrompt = "  > ")
+        public CmdR(string[] exitcodes = null, string cmdPrompt = "> ")
         {
             if (exitcodes != null)
                 _exitcodes = exitcodes;
 
             _cmdPrompt = cmdPrompt;
+            _commandParser = new KeyValueCommandParser();
+            _commandRouter = new Routing();
+        }
+
+        public CmdR(IParseCommands parser, IRouteCommands routing, string[] exitcodes = null, string cmdPrompt = "> ")
+        {
+            if (exitcodes != null)
+                _exitcodes = exitcodes;
+
+            _cmdPrompt = cmdPrompt;
+            _commandParser = parser;
+            _commandRouter = routing;
         }
 
 
@@ -40,20 +53,6 @@ namespace cmdR
             _commandRouter.RegisterRoute(name, parameters, action);
         }
 
-        private IDictionary<string, bool> ConvertToParameterDictionary(IEnumerable<string> parameters)
-        {
-            var result = new Dictionary<string, bool>();
-            foreach (var param in parameters)
-            {
-                // params with a question mark at the end are optional
-                if (param.Last() == '?')
-                    result.Add(param, false);
-                else
-                    result.Add(param.Substring(0, param.Length-1), true);
-            }
-
-            return result;
-        }
 
 
         public void Run(string[] args)
@@ -81,6 +80,23 @@ namespace cmdR
                 command = Console.ReadLine();
             }
             while (!_exitcodes.Contains(command));
+        }
+
+
+
+        private IDictionary<string, bool> ConvertToParameterDictionary(IEnumerable<string> parameters)
+        {
+            var result = new Dictionary<string, bool>();
+            foreach (var param in parameters)
+            {
+                // params with a question mark at the end are optional
+                if (param.Last() == '?')
+                    result.Add(param, false);
+                else
+                    result.Add(param.Substring(0, param.Length - 1), true);
+            }
+
+            return result;
         }
     }
 }
