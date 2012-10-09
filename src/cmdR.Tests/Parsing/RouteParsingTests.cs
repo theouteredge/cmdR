@@ -157,5 +157,29 @@ namespace cmdR.Tests.Parsing
             // Act
             var param = parser.Parse("ls filter? path", out commandName);
         }
+
+        [Test]
+        [ExpectedException(typeof(InvalidRouteException))]
+        public void Parse_EmptyRoute()
+        {
+            // Arrange
+            var parser = new RouteParser();
+            var commandName = "";
+
+            // Act
+            var param = parser.Parse("", out commandName);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidRouteException))]
+        public void Parse_NullRoute()
+        {
+            // Arrange
+            var parser = new RouteParser();
+            var commandName = "";
+
+            // Act
+            var param = parser.Parse(null, out commandName);
+        }
     }
 }

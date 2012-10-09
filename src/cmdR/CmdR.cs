@@ -43,9 +43,8 @@ namespace cmdR
 
         public void RegisterRoute(string route, Action<IDictionary<string, string>> action)
         {
-            if (string.IsNullOrEmpty(route))
-                throw new InvalidRouteException(string.Format("The route is invalid", route));
-
+            if (string.IsNullOrEmpty(route.Trim()))
+                throw new InvalidRouteException(string.Format("An empty route is invalid", route));
 
             var name = "";
             var parameters = _routeParser.Parse(route, out name);

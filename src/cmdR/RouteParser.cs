@@ -13,7 +13,7 @@ namespace cmdR
     {
         public IDictionary<string, ParameterType> Parse(string route, out string commandName)
         {
-            var routeparts = route.Split(' ').Where(x => !string.IsNullOrEmpty(x));
+            var routeparts = route == null ? new List<string>() : route.Split(' ').Where(x => !string.IsNullOrEmpty(x));
 
             if (routeparts.Count() == 0)
                 throw new InvalidRouteException("the round does not have any parts, you have to supply at least a command name");

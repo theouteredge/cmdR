@@ -10,24 +10,24 @@ namespace cmdR
 {
     public class Routing : IRouteCommands
     {
-        public List<Route> Routes { get; private set; }
+        private List<Route> _routes = new List<Route>();
 
 
         public void RegisterRoute(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>> action)
         {
-            this.Routes.Add(new Route(name, parameters, action));
+            _routes.Add(new Route(name, parameters, action));
         }
 
         public void RigisterRoute(Route route)
         {
-            this.Routes.Add(route);
+            _routes.Add(route);
         }
 
 
         public Route FindRoute(string commandName, IDictionary<string, string> parameters)
         {
             var paramName = parameters.Select(x => x.Key).ToList();
-            var routes = this.Routes.Where(x => x.Name == commandName && x.Match(paramName)).ToList();
+            var routes = _routes.Where(x => x.Name == commandName && x.Match(paramName)).ToList();
 
             if (routes.Count == 0)
                 throw new NoRouteFoundException(string.Format("No routes where found which match the parameter list: {0}", string.Join(",", paramName)));
