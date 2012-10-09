@@ -47,5 +47,10 @@ namespace cmdR
         {
             Action.Invoke(parameters);
         }
+
+        public List<string> GetParmaNames()
+        {
+            return ParametersToTake.Select(x => x.Key).ToList();
+        }
     }
 }

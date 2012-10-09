@@ -13,13 +13,28 @@ namespace cmdR
         private List<Route> _routes = new List<Route>();
 
 
+        public int Count { get { return _routes.Count; } }
+
+
         public void RegisterRoute(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>> action)
         {
-            _routes.Add(new Route(name, parameters, action));
+            this.RegisterRoute(new Route(name, parameters, action));
         }
 
-        public void RigisterRoute(Route route)
+        public void RegisterRoute(Route route)
         {
+            var matchingRoutes = _routes.Where(x => x.Name == route.Name).ToList();
+
+            if (matchingRoutes.Count > 0)
+            {
+                foreach (var r in matchingRoutes)
+                {
+                    if (route.Match(r.GetParmaNames()))
+                        throw new InvalidRouteException(string.Format("There is already a route registered which matches you route name [{0}] and parameters you supplied", route.Name));
+                }
+            }
+
+
             _routes.Add(route);
         }
 
