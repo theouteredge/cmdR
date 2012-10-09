@@ -27,9 +27,10 @@ namespace cmdR
             _cmdPrompt = cmdPrompt;
             _commandParser = new KeyValueCommandParser();
             _commandRouter = new Routing();
+            _routeParser = new RouteParser();
         }
 
-        public CmdR(IParseCommands parser, IRouteCommands routing, IParseRoutes _routeParser, string[] exitcodes = null, string cmdPrompt = "> ")
+        public CmdR(IParseCommands parser, IRouteCommands routing, IParseRoutes routeParser, string[] exitcodes = null, string cmdPrompt = "> ")
         {
             if (exitcodes != null)
                 _exitcodes = exitcodes;
@@ -37,6 +38,7 @@ namespace cmdR
             _cmdPrompt = cmdPrompt;
             _commandParser = parser;
             _commandRouter = routing;
+            _routeParser = routeParser;
         }
 
 
@@ -54,19 +56,26 @@ namespace cmdR
 
 
 
+        public void ExecuteCommand(string command)
+        {
+            var commandName = "";
+            var parameters = _commandParser.Parse(command, out commandName);
+            var route = _commandRouter.FindRoute(commandName, parameters);
+
+            route.Execute(parameters);
+        }
+
+
+
         public void Run(string[] args)
         {
             var command = string.Join(" ", args);
-            var commandName = "";
 
             do
             {
                 try
                 {
-                    var parameters = _commandParser.Parse(command, out commandName);
-                    var route = _commandRouter.FindRoute(commandName, parameters);
-
-                    route.Execute(parameters);
+                    this.ExecuteCommand(command);
                 }
                 catch (Exception e)
                 {
