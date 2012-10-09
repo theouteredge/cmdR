@@ -18,8 +18,8 @@ namespace cmdR
         private readonly string _cmdPrompt;
 
 
-        
-        public CmdR(string[] exitcodes = null, string cmdPrompt = "> ")
+
+        public CmdR(string cmdPrompt = "> ", string[] exitcodes = null)
         {
             if (exitcodes != null)
                 _exitcodes = exitcodes;
