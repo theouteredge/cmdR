@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace cmdR
 {
@@ -51,10 +50,10 @@ namespace cmdR
             var routes = _routes.Where(x => x.Name == commandName && x.Match(paramName)).ToList();
 
             if (routes.Count == 0)
-                throw new NoRouteFoundException(string.Format("No routes where found which match the parameter list: {0}", string.Join(",", paramName)));
+                throw new NoRouteFoundException(string.Format("No routes where found which match the parameter list: {0}", string.Join(",", paramName.ToArray())));
 
             if (routes.Count > 1)
-                throw new ToManyRoutesFoundException(string.Format("{0} routes where found which matched the parameter list {2}, matched routes {1}", routes.Count, string.Join(",", routes.Select(x => x.Name))));
+                throw new ToManyRoutesFoundException(string.Format("{0} routes where found which matched the parameter list {2}, matched routes {1}", routes.Count, string.Join(",", routes.Select(x => x.Name).ToArray())));
 
             return routes[0];
         }
