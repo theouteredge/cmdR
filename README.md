@@ -102,15 +102,15 @@ Usage
 Example Output
 =====
 
-    > echo text "hello world!"
+    > echo "hello world!"
     hello world!
-    > cd path c:\test
+    > cd c:\test
     c:\test
     > ls
     file1.txt
     file2.txt
     file3.txt
-    > del file file1.txt
+    > del file1.txt
     > ls
     file2.txt
     file3.txt
@@ -120,10 +120,8 @@ Example Output
 Future Plans
 ===
 
-    0. Create a new Command Parser which infers the parameter names and isn't reliant on the param name being part of the command, i.e. "cd c:\test" instead of "cd path c:\test"
-    1. Allow users to cycle through previously executed commands using the up & down keys
-    2. Allow the actions to have access to the cmdR settings so we can modify them on the fly (register/unregister routes, change the command prompt, exit codes, etc)
-    3. Automatic handling of help or ? command, so cmdR will list all the routes and there parameters along with a description
-    4. Startup message, so users can enter a message that will be displayed when cmdR.Run is called for the first time
-    5. Remove the dependency on the Console.Write and Console.ReadLine to output and read text so we can use cmdR within other types of application (i.e. WPF, Forms or Web pages(?))
-    6. Maybe move to an MVC type framework which will allow you to return results which could forward you onto other routes allowing you to chain commands
+    1. Allow the actions to have access to the cmdR settings so we can modify them on the fly (register/unregister routes, change the command prompt, exit codes, etc)
+    2. Automatic handling of help or ? command, so cmdR will list all the routes and there parameters along with a description
+    3. Startup message, so users can enter a message that will be displayed when cmdR.Run is called for the first time
+    4. Remove the dependency on the Console.Write and Console.ReadLine to output and read text so we can use cmdR within other types of application (i.e. WPF, Forms or Web pages(?))
+    5. Maybe move to an MVC type framework which will allow you to return results which could forward you onto other routes allowing you to chain commands
