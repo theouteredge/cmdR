@@ -58,6 +58,9 @@ namespace cmdR
 
         public void ExecuteCommand(string command)
         {
+            if (string.IsNullOrEmpty(command))
+                return;
+
             var commandName = "";
             var parameters = _commandParser.Parse(command, out commandName);
             var route = _commandRouter.FindRoute(commandName, parameters);
@@ -79,11 +82,10 @@ namespace cmdR
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("An exception was thrown while running your command");
-                    Console.WriteLine("  Message: " + e.Message);
-                    Console.WriteLine("  Trace: " + e.StackTrace);
+                    Console.WriteLine("An exception was thrown while running your command\n  Message: {0}\n  Trace: {1}", e.Message, e.StackTrace);
                 }
 
+                // todo: wrap both of these lines in interfaces so we can abstract away the underlying UI framework, so cmdR can live within a WPF or WinForm app.
                 Console.Write(_cmdPrompt);
                 command = Console.ReadLine();
             }
