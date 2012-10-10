@@ -1,6 +1,5 @@
 ﻿using cmdR.Abstract;
 using cmdR.Exceptions;
-using cmdR.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

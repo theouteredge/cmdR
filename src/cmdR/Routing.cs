@@ -39,6 +39,12 @@ namespace cmdR
         }
 
 
+        public List<Route> GetRoutes()
+        {
+            return _routes;
+        }
+
+
         public Route FindRoute(string commandName, IDictionary<string, string> parameters)
         {
             var paramName = parameters.Select(x => x.Key).ToList();

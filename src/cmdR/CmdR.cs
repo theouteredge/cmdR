@@ -1,4 +1,5 @@
 ﻿using cmdR.Abstract;
+using cmdR.CommandParsing;
 using cmdR.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace cmdR
                 _exitcodes = exitcodes;
 
             _cmdPrompt = cmdPrompt;
-            _commandParser = new KeyValueCommandParser();
+            _commandParser = new OrderedCommandParser();
             _commandRouter = new Routing();
             _routeParser = new RouteParser();
         }
@@ -60,6 +61,8 @@ namespace cmdR
         {
             if (string.IsNullOrEmpty(command))
                 return;
+
+            _commandParser.SetRoutes(_commandRouter.GetRoutes());
 
             var commandName = "";
             var parameters = _commandParser.Parse(command, out commandName);

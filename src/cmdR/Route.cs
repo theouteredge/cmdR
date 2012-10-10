@@ -52,5 +52,21 @@ namespace cmdR
         {
             return ParametersToTake.Select(x => x.Key).ToList();
         }
+
+        public IDictionary<string, ParameterType> GetParameters()
+        {
+            return ParametersToTake;
+        }
+
+        public int RequiredParametersCount()
+        {
+            return ParametersToTake.Where(x => x.Value == ParameterType.Required)
+                                   .Count();
+        }
+
+        public int TotalParametersCount()
+        {
+            return ParametersToTake.Count;
+        }
     }
 }

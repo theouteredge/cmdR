@@ -10,6 +10,7 @@ namespace cmdR.Abstract
         void RegisterRoute(string commandName, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>> action);
         void RegisterRoute(Route route);
 
+        List<Route> GetRoutes();
         Route FindRoute(string commandName, IDictionary<string, string> parameters);
     }
 }

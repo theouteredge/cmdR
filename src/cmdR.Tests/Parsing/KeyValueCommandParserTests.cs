@@ -1,4 +1,5 @@
-﻿using cmdR.Exceptions;
+﻿using cmdR.CommandParsing;
+using cmdR.Exceptions;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
