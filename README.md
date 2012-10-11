@@ -30,8 +30,10 @@ Usage
             
             // setting up the command routes
             cmdR.RegisterRoute("cd path", example.ChangeDirectory);
-            cmdR.RegisterRoute("ls filter?", example.ListDirectory);
             cmdR.RegisterRoute("del file", example.DeleteFile);
+
+            // registering a route with an optional parameter, optional params are denoted by the ? at the end
+            cmdR.RegisterRoute("ls filter?", example.ListDirectory);
 
             // registering a route with a lambda
             cmdR.RegisterRoute("echo text", (parameters) => 
