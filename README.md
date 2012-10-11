@@ -120,8 +120,8 @@ Example Output
 Future Plans
 ===
 
-    1. Allow the actions to have access to the cmdR settings so we can modify them on the fly (register/unregister routes, change the command prompt, exit codes, etc)
-    2. Automatic handling of help or ? command, so cmdR will list all the routes and there parameters along with a description
-    3. Startup message, so users can enter a message that will be displayed when cmdR.Run is called for the first time
-    4. Remove the dependency on the Console.Write and Console.ReadLine to output and read text so we can use cmdR within other types of application (i.e. WPF, Forms or Web pages(?))
-    5. Maybe move to an MVC type framework which will allow you to return results which could forward you onto other routes allowing you to chain commands
+1. Allow the actions to have access to the cmdR settings so we can modify them on the fly (register/unregister routes, change the command prompt, exit codes, etc)
+2. Automatic handling of help or ? command, so cmdR will list all the routes and there parameters along with a description
+3. Startup message, so users can enter a message that will be displayed when cmdR.Run is called for the first time
+4. Remove the dependency on the Console.Write and Console.ReadLine to output and read text so we can use cmdR within other types of application (i.e. WPF, Forms or Web pages(?))
+5. Maybe move to an MVC type framework which will allow you to return results which could forward you onto other routes allowing you to chain commands
