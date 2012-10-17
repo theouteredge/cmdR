@@ -2,10 +2,12 @@ cmdR
 ===
 
 CmdR is a simple command routing framework for console applications, giving you a simple way of routing commands 
-to an Action to perform your apps logic.
+to an Action which will perform your apps logic. This helps introduce a separation between your apps logic and the 
+code to drive the input-parse-execute loop.
 
-CmdR works as a simple loop where the user enters a command which cmdR will route to an Action for execution 
-once the Action has completed cmdR will wait for the user to enter another command and repeat the process
+CmdR works as a simple input-parse-execute loop where the user enters a command (input) which cmdR will parse and 
+route (parse) to an Action for execution (execute) once the Action has completed cmdR will wait for the user to 
+enter another command and repeat the process
 
 
 NuGet
