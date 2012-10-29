@@ -16,7 +16,7 @@ namespace cmdR.Tests.CmdRTests
             var cmdR = new CmdR();
             var closureI = 1;
 
-            cmdR.RegisterRoute("ls", (p) => { closureI += 1; });
+            cmdR.RegisterRoute("ls", (p, c, s) => { closureI += 1; });
             cmdR.ExecuteCommand("ls");
 
             Assert.AreEqual(2, closureI);
@@ -28,7 +28,7 @@ namespace cmdR.Tests.CmdRTests
             var cmdR = new CmdR();
             var closureI = 1;
 
-            cmdR.RegisterRoute("ls path", (p) => { closureI += 1; });
+            cmdR.RegisterRoute("ls path", (p, c, s) => { closureI += 1; });
             cmdR.ExecuteCommand("ls c:\\programfiles\\msbob\\");
 
             Assert.AreEqual(2, closureI);
@@ -39,8 +39,8 @@ namespace cmdR.Tests.CmdRTests
         {
             var cmdR = new CmdR();
             var closureI = 1;
-            
-            cmdR.RegisterRoute("ls path", (p) => { closureI += 1; });
+
+            cmdR.RegisterRoute("ls path", (p, c, s) => { closureI += 1; });
             cmdR.ExecuteCommand("ls \"c:\\program files\\msbob\\\"");
 
             Assert.AreEqual(2, closureI);
@@ -52,7 +52,7 @@ namespace cmdR.Tests.CmdRTests
             var cmdR = new CmdR();
             var closureI = 1;
 
-            cmdR.RegisterRoute("ls path filter?", (p) => { closureI += 1; });
+            cmdR.RegisterRoute("ls path filter?", (p, c, s) => { closureI += 1; });
             cmdR.ExecuteCommand("ls \"c:\\program files\\msbob\\\"");
 
             Assert.AreEqual(2, closureI);
@@ -64,7 +64,7 @@ namespace cmdR.Tests.CmdRTests
             var cmdR = new CmdR();
             var closureI = 1;
 
-            cmdR.RegisterRoute("ls path filter?", (p) => { closureI += 1; });
+            cmdR.RegisterRoute("ls path filter?", (p, c, s) => { closureI += 1; });
             cmdR.ExecuteCommand("ls \"c:\\program files\\msbob\\\" *.exe");
 
             Assert.AreEqual(2, closureI);
@@ -76,7 +76,7 @@ namespace cmdR.Tests.CmdRTests
             var cmdR = new CmdR();
             var paramCount = 0;
 
-            cmdR.RegisterRoute("ls path filter?", (p) => { paramCount = p.Count; });
+            cmdR.RegisterRoute("ls path filter?", (p, c, s) => { paramCount = p.Count; });
             cmdR.ExecuteCommand("ls \"c:\\program files\\msbob\\\" *.exe");
 
             Assert.AreEqual(2, paramCount);
@@ -88,7 +88,7 @@ namespace cmdR.Tests.CmdRTests
             var cmdR = new CmdR();
             var validParams = 0;
 
-            cmdR.RegisterRoute("ls path filter?", (p) => 
+            cmdR.RegisterRoute("ls path filter?", (p, c, s) => 
                 {
                     if (p["path"] == "c:\\program files\\msbob\\")
                         validParams += 1;
@@ -108,7 +108,7 @@ namespace cmdR.Tests.CmdRTests
             var cmdR = new CmdR();
             var validParams = 0;
 
-            cmdR.RegisterRoute("ls path filter? param3?", (p) =>
+            cmdR.RegisterRoute("ls path filter? param3?", (p, c, s) =>
             {
                 if (p["path"] == "c:\\program files\\msbob\\")
                     validParams += 1;

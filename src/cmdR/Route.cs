@@ -1,4 +1,5 @@
 ﻿using cmdR.Abstract;
+using cmdR.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace cmdR
         public string Name { get; set; }
 
         private IDictionary<string, ParameterType> ParametersToTake { get; set; }
-        private Action<IDictionary<string, string>> Action { get; set; }
+        private Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> Action { get; set; }
 
-        public Route(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>> action)
+        public Route(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action)
         {
             this.Name = name;
             this.ParametersToTake = parameters;
@@ -43,9 +44,9 @@ namespace cmdR
             return true;
         }
 
-        public void Execute(IDictionary<string, string> parameters)
+        public void Execute(IDictionary<string, string> parameters, ICmdRConsole console, ICmdRState state)
         {
-            Action.Invoke(parameters);
+            Action.Invoke(parameters, console, state);
         }
 
         public List<string> GetParmaNames()

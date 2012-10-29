@@ -23,9 +23,9 @@ namespace cmdR.UI.Dos
             cmdR.RegisterRoute("del file", example.DeleteFile);
 
             // registering a route with a lambda
-            cmdR.RegisterRoute("echo text", (parameters) => 
+            cmdR.RegisterRoute("echo text", (parameters, console, state) => 
                 { 
-                    Console.WriteLine(parameters["text"]);
+                    console.WriteLine(parameters["text"]);
                 });
 
             

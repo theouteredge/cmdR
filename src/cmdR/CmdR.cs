@@ -1,6 +1,7 @@
 ﻿using cmdR.Abstract;
 using cmdR.CommandParsing;
 using cmdR.Exceptions;
+using cmdR.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,28 +15,31 @@ namespace cmdR
         private IRouteCommands _commandRouter;
         private IParseRoutes _routeParser;
 
-        private readonly string[] _exitcodes = new[] { "exit" };
-        private readonly string _cmdPrompt;
-
+        private ICmdRState _state;
+        private ICmdRConsole _console;
 
 
         public CmdR(string cmdPrompt = "> ", string[] exitcodes = null)
         {
-            if (exitcodes != null)
-                _exitcodes = exitcodes;
-
-            _cmdPrompt = cmdPrompt;
-            _commandParser = new OrderedCommandParser();
-            _commandRouter = new Routing();
-            _routeParser = new RouteParser();
+            this.Init(new OrderedCommandParser(), new Routing(), new RouteParser(), new CmdRConsole(), exitcodes, cmdPrompt);
         }
 
-        public CmdR(IParseCommands parser, IRouteCommands routing, IParseRoutes routeParser, string[] exitcodes = null, string cmdPrompt = "> ")
+        public CmdR(IParseCommands parser, IRouteCommands routing, IParseRoutes routeParser, ICmdRConsole console, string[] exitcodes = null, string cmdPrompt = "> ")
         {
-            if (exitcodes != null)
-                _exitcodes = exitcodes;
+            this.Init(parser, routing, routeParser, console, exitcodes, cmdPrompt);
+        }
 
-            _cmdPrompt = cmdPrompt;
+
+        private void Init(IParseCommands parser, IRouteCommands routing, IParseRoutes routeParser, ICmdRConsole console, string[] exitcodes = null, string cmdPrompt = "> ")
+        {
+            _state = new CmdRState();
+            _state.CmdPrompt = cmdPrompt;
+
+            if (exitcodes != null)
+                _state.ExitCodes = exitcodes;
+
+            _console = console;
+
             _commandParser = parser;
             _commandRouter = routing;
             _routeParser = routeParser;
@@ -43,14 +47,14 @@ namespace cmdR
 
 
 
-        public void RegisterRoute(string route, Action<IDictionary<string, string>> action)
+        public void RegisterRoute(string route, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action)
         {
             if (string.IsNullOrEmpty(route.Trim()))
                 throw new InvalidRouteException(string.Format("An empty route is invalid", route));
 
             var name = "";
             var parameters = _routeParser.Parse(route, out name);
-
+            
             _commandRouter.RegisterRoute(name, parameters, action);
         }
 
@@ -67,7 +71,7 @@ namespace cmdR
             var parameters = _commandParser.Parse(command, out commandName);
             var route = _commandRouter.FindRoute(commandName, parameters);
 
-            route.Execute(parameters);
+            route.Execute(parameters, _console, _state);
         }
 
 
@@ -84,14 +88,14 @@ namespace cmdR
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("An exception was thrown while running your command\n  Message: {0}\n  Trace: {1}", e.Message, e.StackTrace);
+                    _console.WriteLine("An exception was thrown while running your command\n  Message: {0}\n  Trace: {1}", e.Message, e.StackTrace);
                 }
 
                 // todo: wrap both of these lines in interfaces so we can abstract away the underlying UI framework, so cmdR can live within a WPF or WinForm app.
-                Console.Write(_cmdPrompt);
+                _console.Write(_state.CmdPrompt);
                 command = Console.ReadLine();
             }
-            while (!_exitcodes.Contains(command));
+            while (!_state.ExitCodes.Contains(command));
         }
     }
 }

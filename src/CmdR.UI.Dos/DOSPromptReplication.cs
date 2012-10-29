@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cmdR.IO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace cmdR.UI.Dos
     {
         private string _directory = @"c:\";
 
-        public void ChangeDirectory(IDictionary<string, string> param)
+        public void ChangeDirectory(IDictionary<string, string> param, ICmdRConsole console, ICmdRState state)
         {
             var path = param["path"];
 
@@ -23,28 +24,30 @@ namespace cmdR.UI.Dos
             {
                 _directory = _directory + path;
             }
-            else Console.WriteLine("{0} is not a valid directory", path);
+            else console.WriteLine("{0} is not a valid directory", path);
 
             if (_directory.Last() != '\\')
                 _directory = _directory + "\\";
 
-            Console.WriteLine(_directory);
+            state.CmdPrompt = string.Format("{0}\n> ", _directory);
+
+            console.WriteLine(_directory);
         }
-        
-        public void ListDirectory(IDictionary<string, string> param)
+
+        public void ListDirectory(IDictionary<string, string> param, ICmdRConsole console, ICmdRState state)
         {
             foreach(var file in Directory.GetFiles(_directory))
             {
-                Console.WriteLine(Path.GetFileName(file));
+                console.WriteLine(Path.GetFileName(file));
             }
 
             foreach (var directory in Directory.GetDirectories(_directory))
             {
-                Console.WriteLine(directory);
+                console.WriteLine(directory);
             }
         }
-        
-        public void DeleteFile(IDictionary<string, string> param)
+
+        public void DeleteFile(IDictionary<string, string> param, ICmdRConsole console, ICmdRState state)
         {
             var file = param["file"];
 
@@ -56,7 +59,7 @@ namespace cmdR.UI.Dos
             {
                 File.Delete(_directory + file);
             }
-            else Console.WriteLine("{0} does not exist", file);
+            else console.WriteLine("{0} does not exist", file);
         }
     }
 }

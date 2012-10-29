@@ -1,5 +1,6 @@
 ﻿using cmdR.Abstract;
 using cmdR.Exceptions;
+using cmdR.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace cmdR
         public int Count { get { return _routes.Count; } }
 
 
-        public void RegisterRoute(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>> action)
+        public void RegisterRoute(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action)
         {
             this.RegisterRoute(new Route(name, parameters, action));
         }

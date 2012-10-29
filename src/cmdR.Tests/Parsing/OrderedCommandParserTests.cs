@@ -1,5 +1,6 @@
 ﻿using cmdR.CommandParsing;
 using cmdR.Exceptions;
+using cmdR.IO;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace cmdR.Tests.Parsing
     [TestFixture]
     public class OrderedCommandParserTests
     {
-        static Action<IDictionary<string, string>> _defaultAction = (p) => { var i = 1+1; };
+        static Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> _defaultAction = (p, c, s) => { var i = 1 + 1; };
 
         List<Route> _simpleRoute = new List<Route> {
             new Route("ls", new Dictionary<string, ParameterType>(), _defaultAction)
