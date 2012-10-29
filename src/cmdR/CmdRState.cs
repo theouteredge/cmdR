@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cmdR.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,7 @@ namespace cmdR
     {
         public string CmdPrompt { get; set; }
         public string[] ExitCodes { get; set; }
+
+        public List<IRoute> Routes { get; set; }
     }
 }

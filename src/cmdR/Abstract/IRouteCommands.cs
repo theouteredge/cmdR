@@ -11,7 +11,8 @@ namespace cmdR.Abstract
         void RegisterRoute(string commandName, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action);
         void RegisterRoute(Route route);
 
-        List<Route> GetRoutes();
-        Route FindRoute(string commandName, IDictionary<string, string> parameters);
+        List<IRoute> GetRoutes();
+
+        IRoute FindRoute(string commandName, IDictionary<string, string> parameters);
     }
 }

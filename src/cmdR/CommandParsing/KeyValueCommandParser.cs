@@ -9,7 +9,7 @@ namespace cmdR.CommandParsing
 {
     public class KeyValueCommandParser : CommandParserBase, IParseCommands
     {
-        public void SetRoutes(List<Route> routes)
+        public void SetRoutes(List<IRoute> routes)
         {
             // do nothing, we dont care about the routes
         }

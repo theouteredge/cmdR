@@ -43,6 +43,28 @@ namespace cmdR
             _commandParser = parser;
             _commandRouter = routing;
             _routeParser = routeParser;
+            
+            _state.Routes = routing.GetRoutes();
+
+            this.RegisterRoute("?", ListAllTheCommands);
+        }
+
+        private void ListAllTheCommands(IDictionary<string, string> parameters, ICmdRConsole console, ICmdRState state)
+        {
+            foreach (var route in state.Routes)
+            {
+                console.Write("    {0}", route.Name);
+
+                foreach (var p in route.GetParameters())
+                {
+                    if (p.Value == ParameterType.Required)
+                        console.Write(" [{0}]", p.Key);
+                    else
+                        console.Write(" <{0}>", p.Key);
+                }
+
+                console.WriteLine("");
+            }
         }
 
 

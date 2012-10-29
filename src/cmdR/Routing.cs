@@ -10,7 +10,7 @@ namespace cmdR
 {
     public class Routing : IRouteCommands
     {
-        private List<Route> _routes = new List<Route>();
+        private List<IRoute> _routes = new List<IRoute>();
 
 
         public int Count { get { return _routes.Count; } }
@@ -39,13 +39,13 @@ namespace cmdR
         }
 
 
-        public List<Route> GetRoutes()
+        public List<IRoute> GetRoutes()
         {
             return _routes;
         }
 
 
-        public Route FindRoute(string commandName, IDictionary<string, string> parameters)
+        public IRoute FindRoute(string commandName, IDictionary<string, string> parameters)
         {
             var paramName = parameters.Select(x => x.Key).ToList();
             var routes = _routes.Where(x => x.Name == commandName && x.Match(paramName)).ToList();

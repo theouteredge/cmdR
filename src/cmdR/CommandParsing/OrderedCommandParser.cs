@@ -10,9 +10,9 @@ namespace cmdR.CommandParsing
 {
     public class OrderedCommandParser : CommandParserBase, IParseCommands
     {
-        private List<Route> _routes;
+        private List<IRoute> _routes;
 
-        public void SetRoutes(List<Route> routes)
+        public void SetRoutes(List<IRoute> routes)
         {
             _routes = routes;
         }

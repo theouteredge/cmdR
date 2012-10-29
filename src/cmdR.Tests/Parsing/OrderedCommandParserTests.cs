@@ -1,4 +1,5 @@
-﻿using cmdR.CommandParsing;
+﻿using cmdR.Abstract;
+using cmdR.CommandParsing;
 using cmdR.Exceptions;
 using cmdR.IO;
 using NUnit.Framework;
@@ -15,22 +16,22 @@ namespace cmdR.Tests.Parsing
     {
         static Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> _defaultAction = (p, c, s) => { var i = 1 + 1; };
 
-        List<Route> _simpleRoute = new List<Route> {
+        List<IRoute> _simpleRoute = new List<IRoute> {
             new Route("ls", new Dictionary<string, ParameterType>(), _defaultAction)
         };
 
-        List<Route> _singleParamRoute = new List<Route> {
+        List<IRoute> _singleParamRoute = new List<IRoute> {
             new Route("ls", new Dictionary<string, ParameterType>() {{ "path", ParameterType.Required }}, _defaultAction)
         };
 
-        List<Route> _twoParamRoute = new List<Route> {
+        List<IRoute> _twoParamRoute = new List<IRoute> {
             new Route("ls", new Dictionary<string, ParameterType>() 
             {
                 { "path", ParameterType.Required }, { "filter", ParameterType.Required }
             }, _defaultAction)
         };
 
-        List<Route> _twoParamWithOptionalRoute = new List<Route> {
+        List<IRoute> _twoParamWithOptionalRoute = new List<IRoute> {
             new Route("ls", new Dictionary<string, ParameterType>() 
             {
                 { "path", ParameterType.Required }, { "filter", ParameterType.Optional }
