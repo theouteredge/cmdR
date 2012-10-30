@@ -16,14 +16,14 @@ NuGet
 Install-Package cmdR
 
 
-v1.1 Breaking Chnages
+v1.1 Breaking Changes
 ===
 
-In this version we have implemented a small breaking change to the way a routes Action works, its now passed two additonal parameters ICmdRConsole and ICmdRState.
+Two additonal parameters, ICmdRConsole and ICmdRState, have been added to the routes actions, so the action signitures have changed to Action<IDictionary<string, ParameterType>, ICmdRConsole, ICmdRState>
 
-''ICmdRConsole'' abstracts away the reliance on the built in Console class, so we can implement versions for other frameworks in the future, you should use this if you want  to output anything to the screen.
+'''ICmdRConsole'' abstracts away the reliance on the built in Console class, so we can implement versions for other frameworks in the future, you should use this if you want  to output anything to the screen.
 
-''ICmdRState'' gives you access to CmdR's internal state, allowing you to modify exit codes, the CmdPrompt and see the current collection of Registered Routes. This was mainly implemented to give you access to the CmdR CmdPrompt setting so you can modify it while the application is running to give feedback to the user. i.e. to show the current path or which database we are currently connected to. 
+'''ICmdRState''' gives you access to CmdR's internal state, allowing you to modify exit codes, the CmdPrompt and see the current collection of Registered Routes. This was mainly implemented to give you access to the CmdR CmdPrompt setting so you can modify it while the application is running to give feedback to the user. i.e. to show the current path or which database we are currently connected to. 
 
 
 Usage
