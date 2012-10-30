@@ -16,6 +16,16 @@ NuGet
 Install-Package cmdR
 
 
+v1.1 Breaking Chnages
+===
+
+In this version we have implemented a small breaking change to the way a routes Action works, its now passed two additonal parameters ICmdRConsole and ICmdRState.
+
+''ICmdRConsole'' abstracts away the reliance on the built in Console class, so we can implement versions for other frameworks in the future, you should use this if you want  to output anything to the screen.
+
+''ICmdRState'' gives you access to CmdR's internal state, allowing you to modify exit codes, the CmdPrompt and see the current collection of Registered Routes. This was mainly implemented to give you access to the CmdR CmdPrompt setting so you can modify it while the application is running to give feedback to the user. i.e. to show the current path or which database we are currently connected to. 
+
+
 Usage
 =====
 
@@ -28,7 +38,7 @@ Usage
 
             // creating the CmdR class passing, specifying the command prompt (> ) to use and a list of exit codes (exit) the user can type to exit the cmdR loop
             // these are the system defaults, so they dont actually need to be passed in
-            var cmdR = new CmdR("> ", new string[] { "exit" });
+            var cmdR = new CmdR("c:\> ", new string[] { "exit" });
             
             // setting up the command routes
             cmdR.RegisterRoute("cd path", example.ChangeDirectory);
@@ -38,9 +48,9 @@ Usage
             cmdR.RegisterRoute("ls filter?", example.ListDirectory);
 
             // registering a route with a lambda
-            cmdR.RegisterRoute("echo text", (parameters) => 
+            cmdR.RegisterRoute("echo text", (parameters, console, state) => 
                 { 
-                    Console.WriteLine(parameters["text"]);
+                    console.WriteLine(parameters["text"]);
                 }));
 
             
@@ -53,7 +63,7 @@ Usage
     {
         private string _directory = @"c:\";
 
-        public void ChangeDirectory(IDictionary<string, string> param)
+        public void ChangeDirectory(IDictionary<string, string> param, ICmdRConsole console, ICmdRState state)
         {
             var path = param["path"];
 
@@ -65,28 +75,28 @@ Usage
             {
                 _directory = _directory + path;
             }
-            else Console.WriteLine("{0} is not a valid directory", path);
+            else console.WriteLine("{0} is not a valid directory", path);
 
             if (_directory.Last() != '\\')
                 _directory = _directory + "\\";
 
-            Console.WriteLine(_directory);
+            state.CmdPrompt = string.Format("{0}\n> ", _directory);
         }
-        
-        public void ListDirectory(IDictionary<string, string> param)
+
+        public void ListDirectory(IDictionary<string, string> param, ICmdRConsole console, ICmdRState state)
         {
             foreach(var file in Directory.GetFiles(_directory))
             {
-                Console.WriteLine(Path.GetFileName(file));
+                console.WriteLine(Path.GetFileName(file));
             }
 
             foreach (var directory in Directory.GetDirectories(_directory))
             {
-                Console.WriteLine(directory);
+                console.WriteLine(directory);
             }
         }
-        
-        public void DeleteFile(IDictionary<string, string> param)
+
+        public void DeleteFile(IDictionary<string, string> param, ICmdRConsole console, ICmdRState state)
         {
             var file = param["file"];
 
@@ -98,7 +108,7 @@ Usage
             {
                 File.Delete(_directory + file);
             }
-            else Console.WriteLine("{0} does not exist", file);
+            else console.WriteLine("{0} does not exist", file);
         }
     }
 
@@ -106,26 +116,24 @@ Usage
 Example Output
 =====
 
-    > echo "hello world!"
+    c:\> echo "hello world!"
     hello world!
-    > cd c:\test
-    c:\test
-    > ls
+    c:\> cd c:\test
+    c:\test> ls
     file1.txt
     file2.txt
     file3.txt
-    > del file1.txt
-    > ls
+    c:\test> del file1.txt
+    c:\test> ls
     file2.txt
     file3.txt
-    > exit
+    c:\test> exit
 
 
-Future Plans
+Future Plans (maybe)
 ===
 
-1. Allow the actions to have access to the cmdR settings so we can modify them on the fly (register/unregister routes, change the command prompt, exit codes, etc)
-2. Automatic handling of help or ? command, so cmdR will list all the routes and there parameters along with a description
-3. Startup message, so users can enter a message that will be displayed when cmdR.Run is called for the first time
-4. Remove the dependency on the Console.Write and Console.ReadLine to output and read text so we can use cmdR within other types of application (i.e. WPF, Forms or Web pages(?))
-5. Maybe move to an MVC type framework which will allow you to return results which could forward you onto other routes allowing you to chain commands
+1. Startup message, so users can enter a message that will be displayed when cmdR.Run is called for the first time
+2. Implement a verison of the ICmdRConsole interface that wil work with a wpf app, so we can test out the ICmdRConsole interface in something other than a console app
+3. Maybe move to an MVC type framework which will allow you to return results which could forward you onto other routes allowing you to chain commands
+4. Allow us to pump data from one command to annother, i.e. read file.txt |> count-words
