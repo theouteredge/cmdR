@@ -1,5 +1,5 @@
 cmdR
-===
+====
 
 CmdR is a simple command routing framework for console applications, giving you a simple way of routing commands 
 to an Action which will perform your apps logic. This helps introduce a separation between your apps logic and the 
@@ -11,13 +11,13 @@ enter another command and repeat the process
 
 
 NuGet
-=====
+-----
 
 Install-Package cmdR
 
 
 v1.1 Breaking Changes
-===
+---------------------
 
 Two additonal parameters, ICmdRConsole and ICmdRState, have been added to the routes actions, so the action signitures have changed to Action<IDictionary<string, ParameterType>, ICmdRConsole, ICmdRState>
 
@@ -27,7 +27,7 @@ __ICmdRState__ gives you access to CmdR's internal state, allowing you to modify
 
 
 Usage
-=====
+-----
 
     class Program
     {
@@ -114,7 +114,7 @@ Usage
 
 
 Example Output
-=====
+--------------
 
     c:\> echo "hello world!"
     hello world!
@@ -131,7 +131,7 @@ Example Output
 
 
 Future Plans (maybe)
-===
+--------------------
 
 1. Startup message, so users can enter a message that will be displayed when cmdR.Run is called for the first time
 2. Implement a verison of the ICmdRConsole interface that wil work with a wpf app, so we can test out the ICmdRConsole interface in something other than a console app
