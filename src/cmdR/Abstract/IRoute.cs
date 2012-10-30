@@ -6,7 +6,8 @@ namespace cmdR.Abstract
 {
     public interface IRoute
     {
-        string Name { get; set; }
+        string Name { get; }
+        string Description { get; }
 
         void Execute(IDictionary<string, string> parameters, ICmdRConsole console, ICmdRState state);
         bool Match(List<string> paramNames);

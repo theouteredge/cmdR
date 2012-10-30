@@ -18,15 +18,12 @@ namespace cmdR.UI.Dos
             var cmdR = new CmdR("> ", new string[] { "exit" });
             
             // setting up the command routes
-            cmdR.RegisterRoute("cd path", example.ChangeDirectory);
-            cmdR.RegisterRoute("ls filter?", example.ListDirectory);
-            cmdR.RegisterRoute("del file", example.DeleteFile);
+            cmdR.RegisterRoute("cd path", example.ChangeDirectory, "change current directory");
+            cmdR.RegisterRoute("ls filter?", example.ListDirectory, "list the contents of the current directory, optionaly specify a filter to search for contents within the directory");
+            cmdR.RegisterRoute("del file", example.DeleteFile, "delete the sepcified file");
 
             // registering a route with a lambda
-            cmdR.RegisterRoute("echo text", (parameters, console, state) => 
-                { 
-                    console.WriteLine(parameters["text"]);
-                });
+            cmdR.RegisterRoute("echo text", (parameters, console, state) => console.WriteLine(parameters["text"]), "print the specified text to the console");
 
             
             // start the cmdR loop passing in the args as the first command to execute

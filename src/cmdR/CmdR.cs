@@ -21,55 +21,38 @@ namespace cmdR
 
         public CmdR(string cmdPrompt = "> ", string[] exitcodes = null)
         {
-            this.Init(new OrderedCommandParser(), new Routing(), new RouteParser(), new CmdRConsole(), exitcodes, cmdPrompt);
+            this.Init(new OrderedCommandParser(), new Routing(), new RouteParser(), new CmdRConsole(), new CmdRState(), exitcodes, cmdPrompt);
         }
 
-        public CmdR(IParseCommands parser, IRouteCommands routing, IParseRoutes routeParser, ICmdRConsole console, string[] exitcodes = null, string cmdPrompt = "> ")
+        public CmdR(IParseCommands parser, IRouteCommands routing, IParseRoutes routeParser, ICmdRConsole console, ICmdRState state, string[] exitcodes = null, string cmdPrompt = "> ")
         {
-            this.Init(parser, routing, routeParser, console, exitcodes, cmdPrompt);
+            this.Init(parser, routing, routeParser, console, state, exitcodes, cmdPrompt);
         }
 
 
-        private void Init(IParseCommands parser, IRouteCommands routing, IParseRoutes routeParser, ICmdRConsole console, string[] exitcodes = null, string cmdPrompt = "> ")
+        private void Init(IParseCommands parser, IRouteCommands routing, IParseRoutes routeParser, ICmdRConsole console, ICmdRState state, string[] exitcodes = null, string cmdPrompt = "> ")
         {
-            _state = new CmdRState();
+            _state = state;
             _state.CmdPrompt = cmdPrompt;
+            _state.Routes = routing.GetRoutes();
 
             if (exitcodes != null)
                 _state.ExitCodes = exitcodes;
+            else 
+                _state.ExitCodes = new string[] { "exit" };
 
             _console = console;
 
             _commandParser = parser;
             _commandRouter = routing;
             _routeParser = routeParser;
-            
-            _state.Routes = routing.GetRoutes();
 
-            this.RegisterRoute("?", ListAllTheCommands);
-        }
-
-        private void ListAllTheCommands(IDictionary<string, string> parameters, ICmdRConsole console, ICmdRState state)
-        {
-            foreach (var route in state.Routes)
-            {
-                console.Write("    {0}", route.Name);
-
-                foreach (var p in route.GetParameters())
-                {
-                    if (p.Value == ParameterType.Required)
-                        console.Write(" [{0}]", p.Key);
-                    else
-                        console.Write(" <{0}>", p.Key);
-                }
-
-                console.WriteLine("");
-            }
+            this.RegisterRoute("help", ListAllTheCommands, "lists all the commands");
         }
 
 
 
-        public void RegisterRoute(string route, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action)
+        public void RegisterRoute(string route, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action, string description = null)
         {
             if (string.IsNullOrEmpty(route.Trim()))
                 throw new InvalidRouteException(string.Format("An empty route is invalid", route));
@@ -77,7 +60,7 @@ namespace cmdR
             var name = "";
             var parameters = _routeParser.Parse(route, out name);
             
-            _commandRouter.RegisterRoute(name, parameters, action);
+            _commandRouter.RegisterRoute(name, parameters, action, description);
         }
 
 
@@ -115,9 +98,32 @@ namespace cmdR
 
                 // todo: wrap both of these lines in interfaces so we can abstract away the underlying UI framework, so cmdR can live within a WPF or WinForm app.
                 _console.Write(_state.CmdPrompt);
-                command = Console.ReadLine();
+                command = _console.ReadLine();
             }
             while (!_state.ExitCodes.Contains(command));
+        }
+
+
+
+        private void ListAllTheCommands(IDictionary<string, string> parameters, ICmdRConsole console, ICmdRState state)
+        {
+            foreach (var route in state.Routes)
+            {
+                console.Write("    {0}", route.Name);
+
+                foreach (var p in route.GetParameters())
+                {
+                    if (p.Value == ParameterType.Required)
+                        console.Write(" [{0}]", p.Key);
+                    else
+                        console.Write(" <{0}>", p.Key);
+                }
+
+                if (!string.IsNullOrEmpty(route.Description))
+                    console.WriteLine("\n    {0}\n", route.Description);
+                else 
+                    console.WriteLine("\n");
+            }
         }
     }
 }

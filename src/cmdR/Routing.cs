@@ -16,9 +16,9 @@ namespace cmdR
         public int Count { get { return _routes.Count; } }
 
 
-        public void RegisterRoute(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action)
+        public void RegisterRoute(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action, string description = null)
         {
-            this.RegisterRoute(new Route(name, parameters, action));
+            this.RegisterRoute(new Route(name, parameters, action, description));
         }
 
         public void RegisterRoute(Route route)
