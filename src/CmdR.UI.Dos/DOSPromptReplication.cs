@@ -29,9 +29,7 @@ namespace cmdR.UI.Dos
             if (_directory.Last() != '\\')
                 _directory = _directory + "\\";
 
-            state.CmdPrompt = string.Format("{0}\n> ", _directory);
-
-            console.WriteLine(_directory);
+            state.CmdPrompt = string.Format("{0}> ", _directory);
         }
 
         public void ListDirectory(IDictionary<string, string> param, ICmdRConsole console, ICmdRState state)

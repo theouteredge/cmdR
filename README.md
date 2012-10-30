@@ -19,7 +19,9 @@ Install-Package cmdR
 v1.1 Breaking Changes
 ---------------------
 
-Two additonal parameters, ICmdRConsole and ICmdRState, have been added to the routes actions, so the action signitures have changed to Action<IDictionary<string, ParameterType>, ICmdRConsole, ICmdRState>
+Two additonal parameters, ICmdRConsole and ICmdRState, have been added to the routes actions, so the action signitures have changed to 
+    
+    Action<IDictionary<string, ParameterType>, ICmdRConsole, ICmdRState>
 
 __ICmdRConsole__ abstracts away the reliance on the built in Console class, so we can implement versions for other frameworks in the future, you should use this if you want  to output anything to the screen.
 
