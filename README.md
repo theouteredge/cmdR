@@ -136,6 +136,7 @@ Future Plans (maybe)
 --------------------
 
 1. Startup message, so users can enter a message that will be displayed when cmdR.Run is called for the first time
-2. Implement a verison of the ICmdRConsole interface that wil work with a wpf app, so we can test out the ICmdRConsole interface in something other than a console app
-3. Maybe move to an MVC type framework which will allow you to return results which could forward you onto other routes allowing you to chain commands
+2. Implement a way of pipeing commands together
+   1. look at the way nodejs implements middlewhere with the next function
+3. Implement a verison of the ICmdRConsole interface that wil work with a wpf app, so we can test out the ICmdRConsole interface in something other than a console app
 4. Allow us to pump data from one command to annother, i.e. read file.txt |> count-words
