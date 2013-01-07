@@ -139,7 +139,7 @@ namespace cmdR
                     if (!string.IsNullOrEmpty(route.Description))
                         console.WriteLine("  " + route.Description);
                 }
-                else console.WriteLine("  unknown route name [{0}]", parameters["route"]);
+                else console.WriteLine("  unknown command name [{0}]", parameters["route"]);
             }
             else
             {
