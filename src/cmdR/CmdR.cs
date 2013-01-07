@@ -19,6 +19,11 @@ namespace cmdR
         private ICmdRConsole _console;
 
 
+        public ICmdRState State { get { return _state; } }
+        public ICmdRConsole Console { get { return _console; } }
+
+
+
         public CmdR(string cmdPrompt = "> ", string[] exitcodes = null)
         {
             this.Init(new OrderedCommandParser(), new Routing(), new RouteParser(), new CmdRConsole(), new CmdRState(), exitcodes, cmdPrompt);
@@ -61,6 +66,18 @@ namespace cmdR
             var parameters = _routeParser.Parse(route, out name);
             
             _commandRouter.RegisterRoute(name, parameters, action, description);
+        }
+
+
+        public void RegisterRoute(string route, Action<IDictionary<string, string>, CmdR> action, string description = null)
+        {
+            if (string.IsNullOrEmpty(route.Trim()))
+                throw new InvalidRouteException(string.Format("An empty route is invalid", route));
+
+            var name = "";
+            var parameters = _routeParser.Parse(route, out name);
+
+            _commandRouter.RegisterRoute(name, parameters, (dictionary, console, state) => action.Invoke(dictionary, this), description);
         }
 
 
