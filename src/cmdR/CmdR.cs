@@ -52,7 +52,7 @@ namespace cmdR
             _commandRouter = routing;
             _routeParser = routeParser;
 
-            this.RegisterRoute("help", ListAllTheCommands, "lists all the commands");
+            this.RegisterRoute("help route?", ListAllTheCommands, "lists all the commands, or details about a single command if its name is specified");
         }
 
 
@@ -124,22 +124,31 @@ namespace cmdR
 
         private void ListAllTheCommands(IDictionary<string, string> parameters, ICmdRConsole console, ICmdRState state)
         {
-            foreach (var route in state.Routes)
+            if (parameters.ContainsKey("route"))
             {
-                console.Write("    {0}", route.Name);
-
-                foreach (var p in route.GetParameters())
+                if (state.Routes.Any(x => x.Name == parameters["route"]))
                 {
-                    if (p.Value == ParameterType.Required)
-                        console.Write(" [{0}]", p.Key);
-                    else
-                        console.Write(" <{0}>", p.Key);
+                    var route = state.Routes.Single(x => x.Name == parameters["route"]);
+
+                    console.Write("  {0}", route.Name);
+
+                    foreach (var p in route.GetParameters())
+                        console.Write(p.Value == ParameterType.Required ? " {0}" : " {0}?", p.Key);
+                    
+                    console.WriteLine("");
+                    if (!string.IsNullOrEmpty(route.Description))
+                        console.WriteLine("  " + route.Description);
+                }
+                else console.WriteLine("  unknown route name [{0}]", parameters["route"]);
+            }
+            else
+            {
+                foreach (var route in state.Routes)
+                {
+                    console.Write("\t{0}   ", route.Name);
                 }
 
-                if (!string.IsNullOrEmpty(route.Description))
-                    console.WriteLine("\n    {0}\n", route.Description);
-                else 
-                    console.WriteLine("\n");
+                console.WriteLine("");
             }
         }
     }
