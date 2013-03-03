@@ -64,8 +64,7 @@
     <Compile Include="Routing.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NuGet\cmdR.1.0.0.nupkg" />
-    <None Include="NuGet\cmdR.1.0.0.nuspec" />
+    <None Include="NuGet\cmdR.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
