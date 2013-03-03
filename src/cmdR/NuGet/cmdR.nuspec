@@ -2,15 +2,18 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>cmdR</id>
-        <version>1.0.0</version>
+        <version>1.1.1</version>
         <title />
         <authors>theouteredge</authors>
         <owners>theouteredge</owners>
         <projectUrl>https://github.com/theouteredge/cmdR</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>CmdR is a simple command routing framework for console applications, giving you a simple way of routing commands to an Action to perform your apps logic.
+        <description>CmdR is a simple command routing framework for console applications, giving you a simple way of routing commands to an Action which will perform your apps logic. This helps introduce a separation between your apps logic and the code to drive the input-parse-execute loop.
 
-CmdR works as a simple loop where the user enters a command which cmdR will route to an Action for execution once the Action has completed cmdR will wait for the user to enter another command and repeat the process</description>
+CmdR works as a simple input-parse-execute loop where the user enters a command (input) which cmdR will parse and route (parse) to an Action for execution (execute) once the Action has completed cmdR will wait for the user to enter another command and repeat the process
+
+This version contains breaking changes to the Routes actions, please see the github page for details: https://github.com/theouteredge/cmdR
+</description>
         <summary>Console Application Command Routing Framework</summary>
         <copyright>theouteredge</copyright>
         <tags>console routing commandline commands</tags>

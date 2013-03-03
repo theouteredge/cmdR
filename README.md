@@ -55,6 +55,12 @@ Usage
                     console.WriteLine(parameters["text"]);
                 }));
 
+            // registering a route with a lambda and cmdR [v1.2.0]
+            cmdR.RegisterRoute("echo2 text", (parameters, cmd) => 
+                { 
+                    cmd.Console.WriteLine(parameters["text"]);
+                }));
+
             
             // start the cmdR loop passing in the args as the first command to execute
             cmdR.Run(args);
@@ -132,9 +138,21 @@ Example Output
     c:\test> exit
 
 
-Future Plans (maybe)
---------------------
 
+VERSION HISTORY
+---------------
+1.2.0
+Added an additional RegisterRoute which takes in the CmdR class itself. This reduces the amount of params you need to specify while giveing you the same functinality.
+
+    Action<IDictionary<string, ParameterType>, ICmdR>
+
+Cleaned up the help command so its not so damned ugly... still a little ugly
+Cleaned the nuget spec aftr finding the -version switch, we don't need multiple nuspec's anymore
+
+
+
+Future Plans
+------------
 1. Startup message, so users can enter a message that will be displayed when cmdR.Run is called for the first time
 2. Implement a way of pipeing commands together
    1. look at the way nodejs implements middlewhere with the next function
