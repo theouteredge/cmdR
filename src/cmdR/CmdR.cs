@@ -29,9 +29,9 @@ namespace cmdR
             this.Init(new OrderedCommandParser(), new Routing(), new RouteParser(), new CmdRConsole(), new CmdRState(), exitcodes, cmdPrompt);
         }
 
-        public CmdR(IParseCommands parser, IRouteCommands routing, IParseRoutes routeParser, ICmdRConsole console, ICmdRState state, string[] exitcodes = null, string cmdPrompt = "> ")
+        public CmdR(IParseCommands parser = null, IRouteCommands routing = null, IParseRoutes routeParser = null, ICmdRConsole console = null, ICmdRState state = null, string[] exitcodes = null, string cmdPrompt = "> ")
         {
-            this.Init(parser, routing, routeParser, console, state, exitcodes, cmdPrompt);
+            this.Init(parser ?? new OrderedCommandParser(), routing ?? new Routing(), routeParser ?? new RouteParser(), console ?? new CmdRConsole(), state ?? new CmdRState(), exitcodes, cmdPrompt);
         }
 
 
@@ -52,7 +52,7 @@ namespace cmdR
             _commandRouter = routing;
             _routeParser = routeParser;
 
-            this.RegisterRoute("help route?", ListAllTheCommands, "lists all the commands, or details about a single command if its name is specified");
+            this.RegisterRoute("help route?", ListAllTheCommands, "lists all the commands, or details about any commands which start with the supplied name if specified");
         }
 
 
@@ -126,7 +126,7 @@ namespace cmdR
         {
             if (parameters.ContainsKey("route"))
             {
-                if (state.Routes.Any(x => x.Name == parameters["route"]))
+                if (state.Routes.Any(x => x.Name.StartsWith(parameters["route"])))
                 {
                     var route = state.Routes.Single(x => x.Name == parameters["route"]);
 
