@@ -23,6 +23,17 @@ To use the Orders parser you dont need to do anything as its the default. To use
     var cmdR = new CmdR(parser: new KeyValueCommandParser());
 
 
+v1.1 Breaking Changes
+---------------------
+Two additonal parameters, ICmdRConsole and ICmdRState, have been added to the routes actions, so the action signitures have changed to:
+    
+    Action<IDictionary<string, ParameterType>, ICmdRConsole, ICmdRState>
+
+__ICmdRConsole__ abstracts away the reliance on the built in Console class, so we can implement versions for other frameworks in the future, you should use this if you want  to output anything to the screen.
+
+__ICmdRState__ gives you access to CmdR's internal state, allowing you to modify exit codes, the CmdPrompt and see the current collection of Registered Routes. This was mainly implemented to give you access to the CmdR CmdPrompt setting so you can modify it while the application is running to give feedback to the user. i.e. to show the current path or which database we are currently connected to.
+
+
 USAGE
 -----
     class Program
@@ -57,7 +68,6 @@ USAGE
 
             
             // start the cmdR loop passing in the args as the first command to execute
-            cmdR.AutoRegisterCommands();
             cmdR.Run(args);
         }
     }
@@ -134,74 +144,9 @@ Example Output
 
 
 
-USAGE: Modules
---------------
-    
-    public class DirectoryModule : ICmdRModule
-    {
-        public DirectoryModule(CmdR cmdR)
-        {
-            cmdR.RegisterRoute("ls search?", List, "list all files and directories in the current path with an optional RegEx search pattern");
-            cmdR.RegisterRoute("cd path", ChangeDirectory, "sets the currently active path, all subsequent commands will be executed within this path");
-        }
-
-        private void List(IDictionary<string, string> param, CmdR cmd)
-        {
-            //todo: list directories
-        }
-
-        private void ChangeDirectory(IDictionary<string, string> param, CmdR cmd)
-        {
-            if (Directory.Exists(param["path"]))
-            {
-                cmd.State.Variables["path"] = param["path"];
-                cmd.State.CmdPrompt = string.Format("{0}\ncmdR>", param["path"]);
-            }
-            else cmd.Console.WriteLine("{0} does not exists", param["path"]);
-        }
-    }
-
-
-USAGE: Single Command Class
----------------------------
-
-    public class ChangeDirectoryCommand : ICmdRCommand
-    {
-        public string Command { get { return "cd path"; } }
-        public string Description { get { return "sets the currently active path, all subsequent commands will be executed within this path"; } }
-        
-        public void Execute(IDictionary<string, string> param, CmdR cmd)
-        {
-            if (Directory.Exists(param["path"]))
-            {
-                cmd.State.Variables["path"] = param["path"];
-                cmd.State.CmdPrompt = string.Format("{0}\ncmdR>", param["path"]);;
-            }
-            else cmd.Console.WriteLine("{0} does not exists", param["path"]);
-        }
-    }
-
-
-
 VERSION HISTORY
 ---------------
-__1.3.0__
-Changed the ICmdRConsle so the Write and WriteLine methods are __params object[] paramters__ instead of __params string[] paramters__ no more .ToString() needed
-
-Changed the ICmdRState so it has a __IDictionary<string, object> Variables { get; set; }__ this allows you to store variables and share them with other commands
-
-Introduced two new Interfaces which allow you to easily register commands automatically, __ICmdRModule__ and __ICmdRCommand__
-
-**ICmdRModule** allow you to register a single class which implements lots of commands. 
-The CmdR class will be passed into the classes constructor allowing you to register your routes there.
-
-**ICmdRCommand** allows you to register a single class which implements a single command.
-This interface specifies a small interface which will be used by CmdR to automatically register your route.
-
-Simply implement these interfaces and register them with CmdR by calling cmdR.AutoRegisterCommands()
-
-
-__1.2.0__
+1.2.0
 Added an additional RegisterRoute which takes in the CmdR class itself. This reduces the amount of params you need to specify while giveing you the same functinality.
 
     Action<IDictionary<string, ParameterType>, ICmdR>
@@ -209,15 +154,6 @@ Added an additional RegisterRoute which takes in the CmdR class itself. This red
 Cleaned up the help command so its not so damned ugly... still a little ugly
 Cleaned the nuget spec aftr finding the -version switch, we don't need multiple nuspec's anymore
 
-
-__1.1.0__
-Two additonal parameters, ICmdRConsole and ICmdRState, have been added to the routes actions, so the action signitures have changed to:
-    
-    Action<IDictionary<string, ParameterType>, ICmdRConsole, ICmdRState>
-
-__ICmdRConsole__ abstracts away the reliance on the built in Console class, so we can implement versions for other frameworks in the future, you should use this if you want  to output anything to the screen.
-
-__ICmdRState__ gives you access to CmdR's internal state, allowing you to modify exit codes, the CmdPrompt and see the current collection of Registered Routes. This was mainly implemented to give you access to the CmdR CmdPrompt setting so you can modify it while the application is running to give feedback to the user. i.e. to show the current path or which database we are currently connected to.
 
 
 FUTURE PLANS

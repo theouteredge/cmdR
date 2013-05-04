@@ -49,6 +49,7 @@ namespace cmdR
             _routeParser = routeParser;
 
             this.RegisterRoute("help route?", ListAllTheCommands, "lists all the commands, or details about any commands which start with the supplied name if specified");
+            this.RegisterRoute("? route?", ListAllTheCommands, "lists all the commands, or details about any commands which start with the supplied name if specified");
         }
 
 
