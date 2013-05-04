@@ -186,6 +186,7 @@ USAGE: Single Command Class
 VERSION HISTORY
 ---------------
 __1.3.0__
+
 Changed the ICmdRConsle so the Write and WriteLine methods are __params object[] paramters__ instead of __params string[] paramters__ no more .ToString() needed
 
 Changed the ICmdRState so it has a __IDictionary<string, object> Variables { get; set; }__ this allows you to store variables and share them with other commands
@@ -202,6 +203,7 @@ Simply implement these interfaces and register them with CmdR by calling cmdR.Au
 
 
 __1.2.0__
+
 Added an additional RegisterRoute which takes in the CmdR class itself. This reduces the amount of params you need to specify while giveing you the same functinality.
 
     Action<IDictionary<string, ParameterType>, ICmdR>
@@ -211,6 +213,7 @@ Cleaned the nuget spec aftr finding the -version switch, we don't need multiple 
 
 
 __1.1.0__
+
 Two additonal parameters, ICmdRConsole and ICmdRState, have been added to the routes actions, so the action signitures have changed to:
     
     Action<IDictionary<string, ParameterType>, ICmdRConsole, ICmdRState>
