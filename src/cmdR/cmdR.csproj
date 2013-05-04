@@ -55,6 +55,8 @@
     <Compile Include="CommandParsing\KeyValueCommandParser.cs" />
     <Compile Include="CommandParsing\OrderedCommandParser.cs" />
     <Compile Include="ICmdRState.cs" />
+    <Compile Include="ICmdRModule.cs" />
+    <Compile Include="ICmdRCommand.cs" />
     <Compile Include="IO\CmdRConsole.cs" />
     <Compile Include="IO\ICmdRConsole.cs" />
     <Compile Include="ParameterType.cs" />

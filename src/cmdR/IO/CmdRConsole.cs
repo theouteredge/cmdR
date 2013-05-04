@@ -12,7 +12,7 @@ namespace cmdR.IO
             return Console.ReadLine();
         }
 
-        public void Write(string line, string[] parameters = null)
+        public void Write(string line, object[] parameters = null)
         {
             Console.Write(line, parameters);
         }
@@ -22,7 +22,7 @@ namespace cmdR.IO
             Console.Write(line);
         }
 
-        public void WriteLine(string line, string[] paramters = null)
+        public void WriteLine(string line, object[] paramters = null)
         {
             Console.WriteLine(line, paramters);
         }

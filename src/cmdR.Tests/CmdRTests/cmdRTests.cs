@@ -15,7 +15,7 @@ namespace cmdR.Tests.CmdRTests
         [Test]
         public void ExecuteCommand_CanExecuteSimpleCommand()
         {
-            var cmdR = new CmdR();
+            var cmdR = new CmdR("", new string[0]);
             var closureI = 1;
 
             cmdR.RegisterRoute("ls", (p, c, s) => { closureI += 1; });
@@ -27,7 +27,7 @@ namespace cmdR.Tests.CmdRTests
         [Test]
         public void ExecuteCommand_CanExecuteCommandWithSingleParam()
         {
-            var cmdR = new CmdR();
+            var cmdR = new CmdR("", new string[0]);
             var closureI = 1;
 
             cmdR.RegisterRoute("ls path", (p, c, s) => { closureI += 1; });
@@ -39,7 +39,7 @@ namespace cmdR.Tests.CmdRTests
         [Test]
         public void ExecuteCommand_CanExecuteCommandWithEscappedParam()
         {
-            var cmdR = new CmdR();
+            var cmdR = new CmdR("", new string[0]);
             var closureI = 1;
 
             cmdR.RegisterRoute("ls path", (p, c, s) => { closureI += 1; });
@@ -51,7 +51,7 @@ namespace cmdR.Tests.CmdRTests
         [Test]
         public void ExecuteCommand_CanExecuteCommandWithOptionalParam_NotSpecififed()
         {
-            var cmdR = new CmdR();
+            var cmdR = new CmdR("", new string[0]);
             var closureI = 1;
 
             cmdR.RegisterRoute("ls path filter?", (p, c, s) => { closureI += 1; });
@@ -63,7 +63,7 @@ namespace cmdR.Tests.CmdRTests
         [Test]
         public void ExecuteCommand_CanExecuteCommandWithOptionalParam_Specified()
         {
-            var cmdR = new CmdR();
+            var cmdR = new CmdR("", new string[0]);
             var closureI = 1;
 
             cmdR.RegisterRoute("ls path filter?", (p, c, s) => { closureI += 1; });
@@ -75,7 +75,7 @@ namespace cmdR.Tests.CmdRTests
         [Test]
         public void ExecuteCommand_AllParamsArePassedCorreclty_Count()
         {
-            var cmdR = new CmdR();
+            var cmdR = new CmdR("", new string[0]);
             var paramCount = 0;
 
             cmdR.RegisterRoute("ls path filter?", (p, c, s) => { paramCount = p.Count; });
@@ -87,7 +87,7 @@ namespace cmdR.Tests.CmdRTests
         [Test]
         public void ExecuteCommand_AllParamsArePassedCorreclty_Values()
         {
-            var cmdR = new CmdR();
+            var cmdR = new CmdR("", new string[0]);
             var validParams = 0;
 
             cmdR.RegisterRoute("ls path filter?", (p, c, s) => 
@@ -107,7 +107,7 @@ namespace cmdR.Tests.CmdRTests
         [Test]
         public void ExecuteCommand_AllParamsArePassedCorreclty_MissingOptionalParam()
         {
-            var cmdR = new CmdR();
+            var cmdR = new CmdR("", new string[0]);
             var validParams = 0;
 
             cmdR.RegisterRoute("ls path filter? param3?", (p, c, s) =>
@@ -136,10 +136,7 @@ namespace cmdR.Tests.CmdRTests
 
             var cmdR = new CmdR(new OrderedCommandParser(), new Routing(), new RouteParser(), console, new CmdRState());
 
-            cmdR.RegisterRoute("cd", (p, con, s) =>
-                {
-                    con.Write("hello!");
-                });
+            cmdR.RegisterRoute("cd", (p, con, s) => con.Write("hello!"));
 
             cmdR.Run(new string[] { "" });
 
@@ -156,10 +153,7 @@ namespace cmdR.Tests.CmdRTests
 
             var cmdR = new CmdR(new OrderedCommandParser(), new Routing(), new RouteParser(), console, new CmdRState());
 
-            cmdR.RegisterRoute("cd", (p, con, s) =>
-                {
-                    con.Write("hello!");
-                });
+            cmdR.RegisterRoute("cd", (p, con, s) => con.Write("hello!"));
 
             cmdR.Run(new string[] { "cd" });
 
@@ -175,10 +169,7 @@ namespace cmdR.Tests.CmdRTests
 
             var cmdR = new CmdR(new OrderedCommandParser(), new Routing(), new RouteParser(), console, new CmdRState());
 
-            cmdR.RegisterRoute("cd", (p, con, s) =>
-                {
-                    con.Write("hello!");
-                });
+            cmdR.RegisterRoute("cd", (p, con, s) => con.Write("hello!"));
 
             cmdR.Run(new string[] { "cd" });
 
@@ -254,7 +245,7 @@ namespace cmdR.Tests.CmdRTests
             else return "exit";
         }
 
-        public void Write(string line, params string[] parameters)
+        public void Write(string line, params object[] parameters)
         {
             ConsoleWindow.Add(string.Format(line, parameters));
         }
@@ -264,7 +255,7 @@ namespace cmdR.Tests.CmdRTests
             ConsoleWindow.Add(string.Format(line));
         }
 
-        public void WriteLine(string line, params string[] parameters)
+        public void WriteLine(string line, params object[] parameters)
         {
             ConsoleWindow.Add(string.Format(line, parameters));
         }

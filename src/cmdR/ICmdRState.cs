@@ -11,6 +11,7 @@ namespace cmdR
         string CmdPrompt { get; set; }
         string[] ExitCodes { get; set; }
 
+        IDictionary<string, object> Variables { get; set; }
         List<IRoute> Routes { get; set; }
     }
 }

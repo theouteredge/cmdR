@@ -40,11 +40,7 @@ namespace cmdR
             _state = state;
             _state.CmdPrompt = cmdPrompt;
             _state.Routes = routing.GetRoutes();
-
-            if (exitcodes != null)
-                _state.ExitCodes = exitcodes;
-            else 
-                _state.ExitCodes = new string[] { "exit" };
+            _state.ExitCodes = exitcodes ?? new string[] { "exit" };
 
             _console = console;
 
@@ -144,12 +140,45 @@ namespace cmdR
             else
             {
                 foreach (var route in state.Routes)
-                {
-                    console.Write("\t{0}   ", route.Name);
-                }
+                    console.Write("{0}", route.Name.PadRight(20));
 
                 console.WriteLine("");
             }
+        }
+
+        public void AutoRegisterCommands()
+        {
+            RegisterCommandModules();
+
+            var commands = FindAllTypesImplementingICmdRCommand();
+            RegisterSingleCommands(commands);
+        }
+
+        private void RegisterCommandModules()
+        {
+            var type = typeof(ICmdRModule);
+            AppDomain.CurrentDomain.GetAssemblies()
+                                   .ToList()
+                                   .SelectMany(s => s.GetTypes())
+                                   .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
+                                   .Select(c => Activator.CreateInstance(c, this))
+                                   .ToArray();
+        }
+
+        private void RegisterSingleCommands(IEnumerable<ICmdRCommand> commands)
+        {
+            foreach(var cmd in commands)
+                RegisterRoute(cmd.Command, cmd.Execute, cmd.Description);
+        }
+
+        private IEnumerable<ICmdRCommand> FindAllTypesImplementingICmdRCommand()
+        {
+            var type = typeof(ICmdRCommand);
+            return AppDomain.CurrentDomain.GetAssemblies()
+                                          .ToList()
+                                          .SelectMany(s => s.GetTypes())
+                                          .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
+                                          .Select(c => (ICmdRCommand)Activator.CreateInstance(c));
         }
     }
 }
