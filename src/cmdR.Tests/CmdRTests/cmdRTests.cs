@@ -193,6 +193,40 @@ namespace cmdR.Tests.CmdRTests
         }
 
         [Test]
+        public void Run_EscapedCommandSeparatorUsedInCommand()
+        {
+            var console = new FakeCmdRConsole("");
+
+            var cmdR = new CmdR(new OrderedCommandParser(), new Routing(), new RouteParser(), console, new CmdRState());
+
+            cmdR.RegisterRoute("first &", (p, con, s) => con.Write("First Command"));
+            cmdR.RegisterRoute("second", (p, con, s) => con.Write("Second Command"));
+
+            var escapedCommandSeparator = CmdR.ESCAPE_CHAR + CmdR.COMMAND_SEPARATOR;
+            cmdR.Run(new[] { "first", escapedCommandSeparator, CmdR.COMMAND_SEPARATOR, "second" });
+
+            Assert.AreEqual("First Command", console.ConsoleWindow[0]);
+            Assert.AreEqual("Second Command", console.ConsoleWindow[1]);
+        }
+
+        [Test]
+        public void Run_DoubleEscapedCommandSeparatorNotUsedInCommand()
+        {
+            var console = new FakeCmdRConsole("");
+
+            var cmdR = new CmdR(new OrderedCommandParser(), new Routing(), new RouteParser(), console, new CmdRState());
+
+            cmdR.RegisterRoute("first &", (p, con, s) => con.Write("First Command"));
+            cmdR.RegisterRoute("second", (p, con, s) => con.Write("Second Command"));
+
+            var doubleEscapedCommandSeparator = CmdR.ESCAPE_CHAR + CmdR.ESCAPE_CHAR + CmdR.COMMAND_SEPARATOR;
+            cmdR.Run(new[] { "first", doubleEscapedCommandSeparator, CmdR.COMMAND_SEPARATOR, "second" });
+
+            Assert.AreEqual("First Command", console.ConsoleWindow[0]);
+            Assert.AreEqual("Second Command", console.ConsoleWindow[1]);
+        }
+
+        [Test]
         public void Run_WeCanModifyTheCommandPromptAndItsWrittenToTheConsole()
         {
             //todo: use moq to fake the console & state

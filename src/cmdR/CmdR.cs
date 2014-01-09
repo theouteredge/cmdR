@@ -22,6 +22,7 @@ namespace cmdR
         public ICmdRConsole Console { get { return _console; } }
 
         public static string COMMAND_SEPARATOR = "&";
+        public static string ESCAPE_CHAR = "^";
 
         public CmdR(string cmdPrompt = "> ", string[] exitcodes = null)
         {
@@ -145,17 +146,41 @@ namespace cmdR
 
             if (args.Any() && !args.All(string.IsNullOrWhiteSpace))
             {
+                var escapedArgs = EscapeEscapeChar(args);
+
                 var i = 0;
                 while (i < args.Count())
                 {
-                    var commandParts = args.Skip(i).TakeWhile(arg => arg != COMMAND_SEPARATOR);
-                    commands.Add(string.Join(" ", commandParts));
+                    var commandParts = escapedArgs.Skip(i).TakeWhile(arg => arg != COMMAND_SEPARATOR);
+                    commands.Add(string.Join(" ", EscapeKeywords(commandParts)));
 
                     i = commands.Sum(x => x.Split(' ').Length) + commands.Count(); // sum of command parts and separators so far
                 }
             }
 
             return commands;
+        }
+
+        private IEnumerable<string> EscapeEscapeChar(IEnumerable<string> args)
+        {
+            return args.Select(arg =>
+                {
+                    if (arg == null)
+                        return null;
+
+                    return arg.Replace(ESCAPE_CHAR + ESCAPE_CHAR, ESCAPE_CHAR);
+                });
+        }
+
+        private IEnumerable<string> EscapeKeywords(IEnumerable<string> args)
+        {
+            return args.Select(arg =>
+            {
+                if (arg == null)
+                    return null;
+
+                return arg.Replace(ESCAPE_CHAR + COMMAND_SEPARATOR, COMMAND_SEPARATOR);
+            });
         }
 
         private void ListAllTheCommands(IDictionary<string, string> parameters, ICmdRConsole console, ICmdRState state)
