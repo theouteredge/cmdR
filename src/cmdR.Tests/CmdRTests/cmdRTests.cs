@@ -176,6 +176,21 @@ namespace cmdR.Tests.CmdRTests
             Assert.AreEqual("hello!", console.ConsoleWindow[0]);
         }
 
+        [Test]
+        public void Run_SplitsInitialCommandsOnTheCommandSeparator()
+        {
+            var console = new FakeCmdRConsole("");
+
+            var cmdR = new CmdR(new OrderedCommandParser(), new Routing(), new RouteParser(), console, new CmdRState());
+
+            cmdR.RegisterRoute("first", (p, con, s) => con.Write("First Command"));
+            cmdR.RegisterRoute("second", (p, con, s) => con.Write("Second Command"));
+
+            cmdR.Run(new string[] { "first", CmdR.COMMAND_SEPARATOR, "second" });
+
+            Assert.AreEqual("First Command", console.ConsoleWindow[0]);
+            Assert.AreEqual("Second Command", console.ConsoleWindow[1]);
+        }
 
         [Test]
         public void Run_WeCanModifyTheCommandPromptAndItsWrittenToTheConsole()
@@ -209,13 +224,11 @@ namespace cmdR.Tests.CmdRTests
                     state.CmdPrompt = "new prompt> ";
                 });
 
-            cmdR.Run(new string[] { "help" });
+            cmdR.Run(new[] { "help" });
 
-            Assert.AreEqual("    help", console.ConsoleWindow[0]);
-            Assert.AreEqual("\n    lists all the commands\n", console.ConsoleWindow[1]);
-            Assert.AreEqual("    cd", console.ConsoleWindow[2]);
-            Assert.AreEqual("\n", console.ConsoleWindow[3]);
-            Assert.AreEqual("> ", console.ConsoleWindow[4]);
+            Assert.AreEqual("help                ", console.ConsoleWindow[0]);
+            Assert.AreEqual("?                   ", console.ConsoleWindow[1]);
+            Assert.AreEqual("cd                  ", console.ConsoleWindow[2]);
         }
 
 

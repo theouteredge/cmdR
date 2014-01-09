@@ -1,11 +1,10 @@
-﻿using cmdR.Abstract;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using cmdR.Abstract;
 using cmdR.CommandParsing;
 using cmdR.Exceptions;
 using cmdR.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace cmdR
 {
@@ -22,7 +21,7 @@ namespace cmdR
         public ICmdRState State { get { return _state; } }
         public ICmdRConsole Console { get { return _console; } }
 
-
+        public static string COMMAND_SEPARATOR = "&";
 
         public CmdR(string cmdPrompt = "> ", string[] exitcodes = null)
         {
@@ -93,11 +92,29 @@ namespace cmdR
             route.Execute(parameters, _console, _state);
         }
 
-
+        public void ExecuteCommands(List<string> commands)
+        {
+            foreach (var command in commands)
+            {
+                ExecuteCommand(command);
+            }
+        }
 
         public void Run(string[] args)
         {
-            var command = string.Join(" ", args);
+            // Run the initial commands
+            var commands = ConstructCommands(args);
+            try
+            {
+                this.ExecuteCommands(commands);
+            }
+            catch (Exception e)
+            {
+                _console.WriteLine("An exception was thrown while running your initial commands\n  Message: {0}\n  Trace: {1}", e.Message, e.StackTrace);
+            }
+
+            // Allow more commands to be entered via UI
+            var command = string.Empty;
 
             do
             {
@@ -117,7 +134,29 @@ namespace cmdR
             while (!_state.ExitCodes.Contains(command));
         }
 
+        /// <summary>
+        /// Constructs a list of commands using the COMMAND_SEPARATOR to split commands
+        /// </summary>
+        /// <param name="args">The parts of the commands</param>
+        /// <returns>A list of commands</returns>
+        private List<string> ConstructCommands(string[] args)
+        {
+            var commands = new List<string>();
 
+            if (args.Any() && !args.All(string.IsNullOrWhiteSpace))
+            {
+                var i = 0;
+                while (i < args.Count())
+                {
+                    var commandParts = args.Skip(i).TakeWhile(arg => arg != COMMAND_SEPARATOR);
+                    commands.Add(string.Join(" ", commandParts));
+
+                    i = commands.Sum(x => x.Split(' ').Length) + commands.Count(); // sum of command parts and separators so far
+                }
+            }
+
+            return commands;
+        }
 
         private void ListAllTheCommands(IDictionary<string, string> parameters, ICmdRConsole console, ICmdRState state)
         {
