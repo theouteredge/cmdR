@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using cmdR.Abstract;
 using cmdR.CommandParsing;
 using cmdR.Exceptions;
@@ -221,13 +222,54 @@ namespace cmdR
 
         private void RegisterCommandModules()
         {
+            var instances = GetICmdRModuleClasses().Select(c => Activator.CreateInstance(c, this))
+                                                   .ToArray();
+
+            foreach (var module in instances)
+            {
+                var methods = module.GetType()
+                                    .GetMethods()
+                                    .Where(m => m.GetCustomAttributes(typeof (CmdRouteAttribute), false).Length > 0)
+                                    .ToArray();
+
+                foreach (var method in methods)
+                {
+                    var attribute = method.GetCustomAttributes(false)
+                                          .SingleOrDefault(att => att is CmdRouteAttribute);
+
+                    if (attribute != null)
+                    {
+                        var cmdRoute = (CmdRouteAttribute)attribute;
+
+                        if (method.GetParameters().Count() == 2)
+                        {
+                            var meth = method;  // capture closure variables
+                            var mod = module;
+
+                            RegisterRoute(cmdRoute.Route, (param, cmdR) => meth.Invoke(mod, new object[] { param, cmdR }), cmdRoute.Description);
+                        }
+
+                        else if (method.GetParameters().Count() == 3)
+                        {
+                            var meth = method;  // capture closure variables
+                            var mod = module;
+
+                            RegisterRoute(cmdRoute.Route, (param, console, state) => meth.Invoke(mod, new object[] { param, console, state }), cmdRoute.Description);
+                        }
+                        else throw new InvalidMethodSignatureException("The method {0} with a [CmdRouteAttribute] does not have a valid signiture, expecting (Dictonary<string, object>, ICmdR) or (Dictonary<string, object>, ICmdRConsole, ICmdRState)");
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Type> GetICmdRModuleClasses()
+        {
             var type = typeof(ICmdRModule);
-            AppDomain.CurrentDomain.GetAssemblies()
-                                   .ToList()
-                                   .SelectMany(s => s.GetTypes())
-                                   .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
-                                   .Select(c => Activator.CreateInstance(c, this))
-                                   .ToArray();
+            return AppDomain.CurrentDomain
+                            .GetAssemblies()
+                            .ToList()
+                            .SelectMany(s => s.GetTypes())
+                            .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract);
         }
 
         private void RegisterSingleCommands(IEnumerable<ICmdRCommand> commands)

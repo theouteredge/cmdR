@@ -43,6 +43,7 @@
     <Compile Include="Abstract\IParseCommands.cs" />
     <Compile Include="Abstract\IRouteCommands.cs" />
     <Compile Include="CmdR.cs" />
+    <Compile Include="CmdRouteAttribute.cs" />
     <Compile Include="CmdRState.cs" />
     <Compile Include="CommandParsing\CommandParserBase.cs" />
     <Compile Include="Exceptions\NoRoutesSetupException.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="ICmdRCommand.cs" />
     <Compile Include="ICmdRModule.cs" />
     <Compile Include="ICmdRState.cs" />
+    <Compile Include="Exceptions\InvalidMethodSignatureException.cs" />
     <Compile Include="IO\CmdRConsole.cs" />
     <Compile Include="IO\ICmdRConsole.cs" />
     <Compile Include="ParameterType.cs" />
