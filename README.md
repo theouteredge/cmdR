@@ -136,13 +136,13 @@ Example Output
 
 USAGE: Modules
 --------------
+We have two way of registering command in a module. The first is to manually setup all the routes in the modules constructor, or with the new version 1.5 you can setup route with the CmdRouteAttribute above the method. Both Examples are shown below.
     
     public class DirectoryModule : ICmdRModule
     {
         public DirectoryModule(CmdR cmdR)
         {
             cmdR.RegisterRoute("ls search?", List, "list all files and directories in the current path with an optional RegEx search pattern");
-            cmdR.RegisterRoute("cd path", ChangeDirectory, "sets the currently active path, all subsequent commands will be executed within this path");
         }
 
         private void List(IDictionary<string, string> param, CmdR cmd)
@@ -150,6 +150,7 @@ USAGE: Modules
             //todo: list directories
         }
 
+        [CmdRoute("cd path", "sets the currently active path, all subsequent commands will be executed within this path", true))
         private void ChangeDirectory(IDictionary<string, string> param, CmdR cmd)
         {
             if (Directory.Exists(param["path"]))
@@ -185,6 +186,16 @@ USAGE: Single Command Class
 
 VERSION HISTORY
 ---------------
+__1.5.0__
+
+Added in the new CmdRouteAttribute. This allows you to markup methods within an ICmdRModule with the CmdRoute modules instead of having to manually set them all up within the constructor of the Module by calling RegisterRoute for all the methods by hand.
+
+
+__1.4.0__
+
+Allowing multiple commands to be run on start up, you can pass in a command of "cd c:\users & ls" and the system will run both the cd and ls commands one after the other.
+
+
 __1.3.0__
 
 Changed the ICmdRConsle so the Write and WriteLine methods are __params object[] paramters__ instead of __params string[] paramters__ no more .ToString() needed
