@@ -178,7 +178,7 @@ USAGE: Single Command Class
                 cmd.State.Variables["path"] = param["path"];
                 cmd.State.CmdPrompt = string.Format("{0}\ncmdR>", param["path"]);;
             }
-            else cmd.Console.WriteLine("{0} does not exists", param["path"]);
+            else cmd.Console.WriteLine("Invalid path specified {0}", param["path"]);
         }
     }
 
@@ -188,7 +188,7 @@ VERSION HISTORY
 ---------------
 __1.5.0__
 
-Added in the new CmdRouteAttribute. This allows you to markup methods within an ICmdRModule with the CmdRoute modules instead of having to manually set them all up within the constructor of the Module by calling RegisterRoute for all the methods by hand.
+Added in the new CmdRouteAttribute. This allows you to markup methods within an ICmdRModule with the CmdRoute attribute to define route above the method itself instead of having to manually set them all up within the constructor of the Module by calling RegisterRoute for all the methods by hand.
 
 
 __1.4.0__
