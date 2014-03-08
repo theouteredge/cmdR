@@ -11,8 +11,8 @@ namespace cmdR.Tests
     [TestFixture]
     public class RoutingTest
     {
-        private Route _simpleRoute = new Route("ls", new Dictionary<string, ParameterType>(), (p, c, s) => { var i = 1 + 1; });
-        private Route _singleParamRoute = new Route("ls", new Dictionary<string, ParameterType> { { "path", ParameterType.Required } }, (p, c, s) => { var i = 1 + 1; });
+        private Route _simpleRoute = new Route("ls", new Dictionary<string, ParameterType>(), (p, c, s) => {  });
+        private Route _singleParamRoute = new Route("ls", new Dictionary<string, ParameterType> { { "path", ParameterType.Required } }, (p, c, s) => { });
 
 
         [Test]

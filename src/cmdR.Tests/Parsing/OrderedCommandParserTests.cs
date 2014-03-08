@@ -14,7 +14,7 @@ namespace cmdR.Tests.Parsing
     [TestFixture]
     public class OrderedCommandParserTests
     {
-        static Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> _defaultAction = (p, c, s) => { var i = 1 + 1; };
+        static Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> _defaultAction = (p, c, s) => { };
 
         List<IRoute> _simpleRoute = new List<IRoute> {
             new Route("ls", new Dictionary<string, ParameterType>(), _defaultAction)

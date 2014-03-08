@@ -36,7 +36,7 @@ namespace cmdR.Tests.RoutingTests
         [Test]
         public void Match_CanMatchRouteWithoutParams()
         {
-            var route = new Route("ls", new Dictionary<string, ParameterType>(), (p, c, s) => { var i = 1 + 1; });
+            var route = new Route("ls", new Dictionary<string, ParameterType>(), (p, c, s) => { });
 
             var match = route.Match(new List<string>());
 
@@ -122,7 +122,7 @@ namespace cmdR.Tests.RoutingTests
 
         private bool TryMatchRoute(IDictionary<string, ParameterType> routeParams, List<string> commandParams)
         {
-            var route = new Route("ls", routeParams, (p, c, s) => { var i = 1 + 1; });
+            var route = new Route("ls", routeParams, (p, c, s) => { });
 
             return route.Match(commandParams);
         }

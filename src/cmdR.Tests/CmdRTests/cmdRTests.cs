@@ -186,7 +186,7 @@ namespace cmdR.Tests.CmdRTests
             cmdR.RegisterRoute("first", (p, con, s) => con.Write("First Command"));
             cmdR.RegisterRoute("second", (p, con, s) => con.Write("Second Command"));
 
-            cmdR.Run(new string[] { "first", CmdR.COMMAND_SEPARATOR, "second" });
+            cmdR.Run(new string[] { "first", CmdRExtensions.COMMAND_SEPARATOR, "second" });
 
             Assert.AreEqual("First Command", console.ConsoleWindow[0]);
             Assert.AreEqual("Second Command", console.ConsoleWindow[1]);
@@ -202,8 +202,8 @@ namespace cmdR.Tests.CmdRTests
             cmdR.RegisterRoute("first &", (p, con, s) => con.Write("First Command"));
             cmdR.RegisterRoute("second", (p, con, s) => con.Write("Second Command"));
 
-            var escapedCommandSeparator = CmdR.ESCAPE_CHAR + CmdR.COMMAND_SEPARATOR;
-            cmdR.Run(new[] { "first", escapedCommandSeparator, CmdR.COMMAND_SEPARATOR, "second" });
+            var escapedCommandSeparator = CmdRExtensions.ESCAPE_CHAR + CmdRExtensions.COMMAND_SEPARATOR;
+            cmdR.Run(new[] { "first", escapedCommandSeparator, CmdRExtensions.COMMAND_SEPARATOR, "second" });
 
             Assert.AreEqual("First Command", console.ConsoleWindow[0]);
             Assert.AreEqual("Second Command", console.ConsoleWindow[1]);
@@ -219,8 +219,8 @@ namespace cmdR.Tests.CmdRTests
             cmdR.RegisterRoute("first &", (p, con, s) => con.Write("First Command"));
             cmdR.RegisterRoute("second", (p, con, s) => con.Write("Second Command"));
 
-            var doubleEscapedCommandSeparator = CmdR.ESCAPE_CHAR + CmdR.ESCAPE_CHAR + CmdR.COMMAND_SEPARATOR;
-            cmdR.Run(new[] { "first", doubleEscapedCommandSeparator, CmdR.COMMAND_SEPARATOR, "second" });
+            var doubleEscapedCommandSeparator = CmdRExtensions.ESCAPE_CHAR + CmdRExtensions.ESCAPE_CHAR + CmdRExtensions.COMMAND_SEPARATOR;
+            cmdR.Run(new[] { "first", doubleEscapedCommandSeparator, CmdRExtensions.COMMAND_SEPARATOR, "second" });
 
             Assert.AreEqual("First Command", console.ConsoleWindow[0]);
             Assert.AreEqual("Second Command", console.ConsoleWindow[1]);
