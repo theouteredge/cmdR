@@ -63,7 +63,10 @@ namespace cmdR
 
 
 
-
+        /// <summary>
+        /// Uses Reflection to loads and constructs all the ICmdRModules and ICmdRCommands from all the loaded assemblies and initalises them.
+        /// This will also Register all Routes using CmdRouteAttributes
+        /// </summary>
         public static void AutoRegisterCommands(this CmdR cmdR)
         {
             RegisterCommandModules(cmdR);
