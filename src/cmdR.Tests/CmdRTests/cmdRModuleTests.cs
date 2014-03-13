@@ -17,8 +17,8 @@ namespace cmdR.Tests.CmdRTests
             var cmdR = new CmdR("> ");
             cmdR.AutoRegisterCommands();
 
-            // 2 built in routes, 2 basic module commands, 2 attribute commands
-            Assert.AreEqual(6, cmdR.State.Routes.Count);
+            // 1 built in route, 2 basic module commands, 2 attribute commands
+            Assert.AreEqual(5, cmdR.State.Routes.Count);
         }
 
         [Test]

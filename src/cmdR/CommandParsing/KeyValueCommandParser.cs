@@ -17,11 +17,13 @@ namespace cmdR.CommandParsing
 
         public IDictionary<string, string> Parse(string command, out string commandName)
         {
-            var result = new Dictionary<string, string>();
             var position = 0;
             var nextposition = 0;
 
             command = command.Trim();
+
+            var switches = ParseSwitches(ref command);
+            var result = switches.ToDictionary(pair => pair.Key, pair => pair.Value);
 
             commandName = GetUnescappedToken(command, ' ', position, out nextposition);
             position = nextposition;

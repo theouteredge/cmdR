@@ -47,6 +47,7 @@
     <Compile Include="Parsing\KeyValueCommandParserTests.cs" />
     <Compile Include="Parsing\OrderedCommandParserTests.cs" />
     <Compile Include="Parsing\RouteParsingTests.cs" />
+    <Compile Include="Parsing\SwitchParsingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingTests\RouteTests.cs" />
     <Compile Include="RoutingTests\RoutingTest.cs" />

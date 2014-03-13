@@ -1,13 +1,9 @@
-﻿using cmdR.CommandParsing;
+﻿using System.Linq;
+using cmdR.CommandParsing;
 using cmdR.Exceptions;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace cmdR.Tests.CommandParsing
+namespace cmdR.Tests.Parsing
 {
     [TestFixture]
     public class KeyValueCommandParserTests

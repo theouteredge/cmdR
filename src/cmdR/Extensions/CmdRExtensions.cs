@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using cmdR.Exceptions;
 
 namespace cmdR
@@ -10,6 +11,7 @@ namespace cmdR
     {
         public static string COMMAND_SEPARATOR = "&";
         public static string ESCAPE_CHAR = "\\";
+
 
 
         /// <summary>
@@ -97,7 +99,16 @@ namespace cmdR
                     {
                         var cmdRoute = (CmdRouteAttribute)attribute;
 
-                        if (method.GetParameters().Count() == 2)
+                        // todo: should we validate the type of parameter before trying to invoke the methods?
+                        if (method.GetParameters().Count() == 1)
+                        {
+                            var meth = method;  // capture closure variables
+                            var mod = module;
+
+                            cmdR.RegisterRoute(cmdRoute.Route, param => meth.Invoke(mod, new object[] { param }), cmdRoute.Description);
+                        }
+
+                        else if (method.GetParameters().Count() == 2)
                         {
                             var meth = method;  // capture closure variables
                             var mod = module;
@@ -117,6 +128,7 @@ namespace cmdR
                 }
             }
         }
+
 
         private static IEnumerable<Type> GetICmdRModuleClasses()
         {

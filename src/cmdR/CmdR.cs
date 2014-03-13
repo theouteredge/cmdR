@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using cmdR.Abstract;
@@ -50,6 +51,17 @@ namespace cmdR
         }
 
 
+
+        public void RegisterRoute(string route, Action<IDictionary<string, string>> action, string description = null)
+        {
+            if (string.IsNullOrEmpty(route.Trim()))
+                throw new InvalidRouteException(string.Format("An empty route is invalid", route));
+
+            var name = "";
+            var parameters = _routeParser.Parse(route, out name);
+            
+            _commandRouter.RegisterRoute(name, parameters, (p, c, s) => action.Invoke(p), description);
+        }
 
         public void RegisterRoute(string route, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action, string description = null)
         {

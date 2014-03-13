@@ -1,4 +1,5 @@
-﻿using cmdR.Exceptions;
+﻿using System.Text.RegularExpressions;
+using cmdR.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,29 @@ namespace cmdR.CommandParsing
 {
     public class CommandParserBase
     {
+        /// <summary>
+        /// Parses out all the switches (/s /switch) contained within the command and places them within a dictionary, it also removes them from the passed in cmd param
+        /// </summary>
+        /// <returns>List of switches contained within the cmd</returns>
+        public IDictionary<string, string> ParseSwitches(ref string cmd)
+        {
+            var switches = new Dictionary<string, string>();
+            var switchReg = new Regex(@"/\w*?( |$)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+            if (!switchReg.IsMatch(cmd))
+                return switches;
+
+            var matches = switchReg.Matches(cmd);
+            for (var i = 0; i < matches.Count; i++)
+                switches.Add(matches[i].Value.Trim(), "");
+
+            cmd = switchReg.Replace(cmd, "");
+
+            return switches;
+        }
+
+
+
         protected string GetEscappedToken(string command, char terminator, char group, string escape, int position, out int nextposition)
         {
             var token = "";

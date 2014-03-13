@@ -22,12 +22,14 @@ namespace cmdR.CommandParsing
             if (_routes == null)
                 throw new NoRoutesSetupException("The command cannot be parsed as no routes have been setup");
 
-            var result = new Dictionary<string, string>();
             var paramValues = new List<string>();
             var position = 0;
             var nextposition = 0;
 
             command = command.Trim();
+
+            var switches = ParseSwitches(ref command);
+            var result = switches.ToDictionary(pair => pair.Key, pair => pair.Value);
 
             var cmdName = GetUnescappedToken(command, ' ', position, out nextposition);
             position = nextposition;
