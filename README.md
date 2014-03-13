@@ -190,6 +190,8 @@ __1.5.0__
 
 Added in the new CmdRouteAttribute. This allows you to markup methods within an ICmdRModule with the CmdRoute attribute to define route above the method itself instead of having to manually set them all up within the constructor of the Module by calling RegisterRoute for all the methods by hand.
 
+Added in the ability to parse out switches, so you can add /something to any command and these will be parsed out and added the to params list, you can then check for the existance of these with param.ContainsKey("/switch") these can be used for simple optional switches like /test and /recurse which can change the behaviour of the command, i.e. to show what the command would do when run, or recurse sub folders in the current path when performing an operation on the file system.
+
 
 __1.4.0__
 
