@@ -84,5 +84,18 @@ namespace cmdR.Tests
 
             var matchedRoute = routing.FindRoute("ls", new Dictionary<string, string>() { { "path", @"c:\temp\" } });
         }
+
+
+        [Test]
+        public void FindRoute_CanFindARouteWithDashInName()
+        {
+            var routing = new Routing();
+
+            routing.RegisterRoute("import-keys", new Dictionary<string, ParameterType>() { { "path", ParameterType.Required } }, (p, c, s) => { }, "");
+            
+            var matchedRoute = routing.FindRoute("import-keys", new Dictionary<string, string>() { { "path", @"c:\temp\" } });
+
+            Assert.AreEqual("import-keys", matchedRoute.Name);
+        }
     }
 }

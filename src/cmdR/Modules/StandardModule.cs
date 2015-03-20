@@ -29,7 +29,6 @@ namespace cmdR.Modules
                     foreach (var p in route.GetParameters())
                         _cmdR.Console.Write(p.Value == ParameterType.Required ? " {0}" : " {0}?", p.Key);
 
-                    _cmdR.Console.WriteLine("");
                     if (!string.IsNullOrEmpty(route.Description))
                         _cmdR.Console.WriteLine("  " + route.Description);
                 }

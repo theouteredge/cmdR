@@ -252,17 +252,42 @@ namespace cmdR.Tests.CmdRTests
             var console = new FakeCmdRConsole("");
 
             var cmdR = new CmdR(new OrderedCommandParser(), new Routing(), new RouteParser(), console, new CmdRState());
-
+            cmdR.AutoRegisterCommands();
             cmdR.RegisterRoute("cd", (p, con, state) =>
                 {
                     state.CmdPrompt = "new prompt> ";
                 });
 
-            cmdR.Run(new[] { "help" });
+            cmdR.Run(new[] { "?" });
 
-            Assert.AreEqual("help                ", console.ConsoleWindow[0]);
-            Assert.AreEqual("?                   ", console.ConsoleWindow[1]);
-            Assert.AreEqual("cd                  ", console.ConsoleWindow[2]);
+            Assert.AreEqual("basic-module1       ", console.ConsoleWindow[0]);
+            Assert.AreEqual("basic-module2       ", console.ConsoleWindow[1]);
+            Assert.AreEqual("attribute-module1   ", console.ConsoleWindow[2]);
+            Assert.AreEqual("attribute-module2   ", console.ConsoleWindow[3]);
+            Assert.AreEqual("?                   ", console.ConsoleWindow[4]);
+            Assert.AreEqual("cd                  ", console.ConsoleWindow[5]);
+            Assert.AreEqual("", console.ConsoleWindow[6]);
+            Assert.AreEqual("> ", console.ConsoleWindow[7]);
+            Assert.AreEqual("> ", console.ConsoleWindow[8]);
+        }
+
+        [Test]
+        public void Run_HelpWithDetails()
+        {
+            //todo: use moq to fake the console & state
+            var console = new FakeCmdRConsole("");
+
+            var cmdR = new CmdR(new OrderedCommandParser(), new Routing(), new RouteParser(), console, new CmdRState());
+            cmdR.AutoRegisterCommands();
+            cmdR.RegisterRoute("cd", (p, con, state) =>
+            {
+                state.CmdPrompt = "new prompt> ";
+            }, "changes directory");
+
+            cmdR.Run(new[] { "? cd" });
+
+            Assert.AreEqual("  cd", console.ConsoleWindow[0]);
+            Assert.AreEqual("  changes directory", console.ConsoleWindow[1]);
         }
 
 

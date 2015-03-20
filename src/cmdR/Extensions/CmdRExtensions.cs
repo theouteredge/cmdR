@@ -23,7 +23,7 @@ namespace cmdR
         {
             var commands = new List<string>();
 
-            if (args.Any() && !args.All(string.IsNullOrWhiteSpace))
+            if (args.Any() && !args.All(x => string.IsNullOrEmpty(x.Trim())))
             {
                 var escapedArgs = EscapeEscapeChar(args);
 
@@ -31,7 +31,7 @@ namespace cmdR
                 while (i < args.Count())
                 {
                     var commandParts = escapedArgs.Skip(i).TakeWhile(arg => arg != COMMAND_SEPARATOR);
-                    commands.Add(string.Join(" ", EscapeKeywords(commandParts)));
+                    commands.Add(string.Join(" ", EscapeKeywords(commandParts).ToArray()));
 
                     i = commands.Sum(x => x.Split(' ').Length) + commands.Count(); // sum of command parts and separators so far
                 }

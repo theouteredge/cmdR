@@ -26,11 +26,11 @@ namespace cmdR
         public bool Match(List<string> paramNames)
         {
             // does the amount of required params meet the params we where expecting?
-            if (paramNames.Count < this.ParametersToTake.Where(x => x.Value == ParameterType.Required).Count())
+            if (paramNames.Count < ParametersToTake.Count(x => x.Value == ParameterType.Required))
                 return false;
 
             // check to see if we where expecing all the params which where passed in
-            foreach(var param in paramNames)
+            foreach(var param in paramNames.Where(x => !x.StartsWith("-")))
             {
                 if (!this.ParametersToTake.ContainsKey(param))
                     return false;
