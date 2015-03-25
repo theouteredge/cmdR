@@ -9,7 +9,7 @@ namespace cmdR.Abstract
     public interface IRouteCommands
     {
         void RegisterRoute(string commandName, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action, string description = null);
-        void RegisterRoute(Route route);
+        void RegisterRoute(IRoute route);
 
         List<IRoute> GetRoutes();
 

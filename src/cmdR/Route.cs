@@ -30,7 +30,7 @@ namespace cmdR
                 return false;
 
             // check to see if we where expecing all the params which where passed in
-            foreach(var param in paramNames.Where(x => !x.StartsWith("-")))
+            foreach(var param in paramNames.Where(x => !x.StartsWith("/")))
             {
                 if (!this.ParametersToTake.ContainsKey(param))
                     return false;

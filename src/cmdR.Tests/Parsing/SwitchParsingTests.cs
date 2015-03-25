@@ -13,6 +13,25 @@ namespace cmdR.Tests.Parsing
     [TestFixture]
     public class SwitchParsingTests
     {
+        readonly IRouteCommands _routing = new Routing();
+        static readonly Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> DefaultAction = (p, c, s) => { };
+
+        List<IRoute> _routes = new List<IRoute> {
+            new Route("ls", new Dictionary<string, ParameterType>() 
+                {
+                    { "path", ParameterType.Required }, { "filter", ParameterType.Optional }
+                }, DefaultAction)
+        };
+
+
+        [TestFixtureSetUp]
+        public void Setup()
+        {
+            foreach(var route in _routes)
+                _routing.RegisterRoute(route);
+        }
+
+
         [Test]
         public void Parse_KeyValueCommandParser_HandlesSwitchesAndRoutesTheCommandCorrectly()
         {
@@ -21,11 +40,15 @@ namespace cmdR.Tests.Parsing
             var commandName = "";
 
             // Act
-            var param = parser.Parse("ls path \"c:\\ProgramFiles\" filter \"*.csv\" /s /switch", out commandName);    
+            var param = parser.Parse("ls path \"c:\\ProgramFiles\" filter \"*.csv\" /s /switch", out commandName);
+            var route = _routing.FindRoute(commandName, param);
 
             // Assert
             Assert.AreEqual("ls", commandName);
             Assert.AreEqual(4, param.Count); // two param and 2 switches
+
+            Assert.IsNotNull(route);
+            Assert.AreEqual("ls", route.Name);
         }
 
         [Test]
@@ -37,23 +60,20 @@ namespace cmdR.Tests.Parsing
 
             // Act
             var param = parser.Parse("ls path \"c:\\ProgramFiles\" filter \"*.csv\" /s /switch", out commandName);
+            var route = _routing.FindRoute(commandName, param);
 
             // Assert
             Assert.IsTrue(param.ContainsKey("/s"));
             Assert.IsTrue(param.ContainsKey("/switch"));
+
+            Assert.IsNotNull(route);
+            Assert.AreEqual("ls", route.Name);
         }
 
 
 
 
-        static Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> _defaultAction = (p, c, s) => { };
-
-        List<IRoute> _routes = new List<IRoute> {
-            new Route("ls", new Dictionary<string, ParameterType>() 
-                {
-                    { "path", ParameterType.Required }, { "filter", ParameterType.Optional }
-                }, _defaultAction)
-        };
+        
 
 
         [Test]
@@ -63,14 +83,18 @@ namespace cmdR.Tests.Parsing
             var parser = new OrderedCommandParser();
             var commandName = "";
 
-            parser.SetRoutes(_routes);
+            parser.SetRoutes(_routing.GetRoutes());
 
             // Act
             var param = parser.Parse("ls c:\\ProgramFiles *.csv /s /switch", out commandName);
+            var route = _routing.FindRoute(commandName, param);
 
             // Assert
             Assert.AreEqual("ls", commandName);
             Assert.AreEqual(4, param.Count); // two param and 2 switches
+
+            Assert.IsNotNull(route);
+            Assert.AreEqual("ls", route.Name);
         }
 
         [Test]
@@ -78,16 +102,20 @@ namespace cmdR.Tests.Parsing
         {
             // Arrange
             var parser = new OrderedCommandParser();
+            
             var commandName = "";
-
-            parser.SetRoutes(_routes);
+            parser.SetRoutes(_routing.GetRoutes());
 
             // Act
             var param = parser.Parse("ls c:\\ProgramFiles *.csv /s /switch", out commandName);
+            var route = _routing.FindRoute(commandName, param);
 
             // Assert
             Assert.IsTrue(param.ContainsKey("/s"));
             Assert.IsTrue(param.ContainsKey("/switch"));
+
+            Assert.IsNotNull(route);
+            Assert.AreEqual("ls", route.Name);
         }
     }
 }

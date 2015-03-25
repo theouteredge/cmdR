@@ -21,7 +21,7 @@ namespace cmdR
             this.RegisterRoute(new Route(name, parameters, action, description));
         }
 
-        public void RegisterRoute(Route route)
+        public void RegisterRoute(IRoute route)
         {
             var matchingRoutes = _routes.Where(x => x.Name == route.Name).ToList();
 
