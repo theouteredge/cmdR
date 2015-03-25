@@ -64,7 +64,7 @@ namespace cmdR.CommandParsing
                     var groupEndPre = end - 1 < 0 ? "" : command.Substring(end - 1, 2);
                     var groupEndPost = end + 1 >= command.Length ? "" : command.Substring(end, 2);
 
-                    // checking to see if the group char is being escapped or not
+                    // checking to see if the group char is being escaped or not
                     if (groupEndPre != escape || groupEndPost != escape)
                         endOfToken = true;
                 }

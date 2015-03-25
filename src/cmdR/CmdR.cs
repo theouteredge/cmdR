@@ -27,12 +27,12 @@ namespace cmdR
 
         public CmdR(string cmdPrompt = "> ", string[] exitcodes = null)
         {
-            this.Init(new OrderedCommandParser(), new Routing(), new RouteParser(), new CmdRConsole(), new CmdRState(), exitcodes, cmdPrompt);
+            Init(new OrderedCommandParser(), new Routing(), new RouteParser(), new CmdRConsole(), new CmdRState(), exitcodes, cmdPrompt);
         }
 
         public CmdR(IParseCommands parser = null, IRouteCommands routing = null, IParseRoutes routeParser = null, ICmdRConsole console = null, ICmdRState state = null, string[] exitcodes = null, string cmdPrompt = "> ")
         {
-            this.Init(parser ?? new OrderedCommandParser(), routing ?? new Routing(), routeParser ?? new RouteParser(), console ?? new CmdRConsole(), state ?? new CmdRState(), exitcodes, cmdPrompt);
+            Init(parser ?? new OrderedCommandParser(), routing ?? new Routing(), routeParser ?? new RouteParser(), console ?? new CmdRConsole(), state ?? new CmdRState(), exitcodes, cmdPrompt);
         }
 
 
@@ -118,7 +118,7 @@ namespace cmdR
             var commands = this.ConstructMultipleCommands(args);
             try
             {
-                this.ExecuteCommands(commands);
+                ExecuteCommands(commands);
             }
             catch (Exception e)
             {
@@ -132,7 +132,7 @@ namespace cmdR
             {
                 try
                 {
-                    this.ExecuteCommand(command);
+                    ExecuteCommand(command);
                 }
                 catch (Exception e)
                 {

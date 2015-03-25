@@ -17,10 +17,10 @@ namespace cmdR
 
         public Route(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action, string description = null)
         {
-            this.Name = name;
-            this.ParametersToTake = parameters;
-            this.Action = action;
-            this.Description = description;
+            Name = name;
+            ParametersToTake = parameters;
+            Action = action;
+            Description = description;
         }
 
         public bool Match(List<string> paramNames)
@@ -32,7 +32,7 @@ namespace cmdR
             // check to see if we where expecing all the params which where passed in
             foreach(var param in paramNames.Where(x => !x.StartsWith("/")))
             {
-                if (!this.ParametersToTake.ContainsKey(param))
+                if (!ParametersToTake.ContainsKey(param))
                     return false;
             }
 
@@ -63,8 +63,7 @@ namespace cmdR
 
         public int RequiredParametersCount()
         {
-            return ParametersToTake.Where(x => x.Value == ParameterType.Required)
-                                   .Count();
+            return ParametersToTake.Count(x => x.Value == ParameterType.Required);
         }
 
         public int TotalParametersCount()

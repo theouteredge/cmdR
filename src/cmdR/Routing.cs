@@ -18,7 +18,7 @@ namespace cmdR
 
         public void RegisterRoute(string name, IDictionary<string, ParameterType> parameters, Action<IDictionary<string, string>, ICmdRConsole, ICmdRState> action, string description = null)
         {
-            this.RegisterRoute(new Route(name, parameters, action, description));
+            RegisterRoute(new Route(name, parameters, action, description));
         }
 
         public void RegisterRoute(IRoute route)
