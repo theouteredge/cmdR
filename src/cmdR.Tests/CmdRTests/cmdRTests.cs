@@ -332,5 +332,10 @@ namespace cmdR.Tests.CmdRTests
         {
             ConsoleWindow.Add(string.Format(line));
         }
+
+        public void Clear()
+        {
+            ConsoleWindow.Clear();
+        }
     }
 }

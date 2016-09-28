@@ -56,5 +56,10 @@ namespace cmdR.UI.Dos
             }
             else console.WriteLine("{0} does not exist", file);
         }
+
+        public void Clear(IDictionary<string, string> param, ICmdRConsole console, ICmdRState state)
+        {
+            console.Clear();
+        }
     }
 }

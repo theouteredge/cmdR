@@ -9,5 +9,7 @@
 
         void WriteLine(string line, params object[] paramters);
         void WriteLine(string line);
+
+        void Clear();
     }
 }

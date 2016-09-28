@@ -28,5 +28,10 @@ namespace cmdR.IO
         {
             Console.WriteLine(line);
         }
+
+        public void Clear()
+        {
+            Console.Clear();
+        }
     }
 }
