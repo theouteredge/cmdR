@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace cmdR.UI.Dos
+﻿namespace cmdR.UI.Dos
 {
     class Program
     {
@@ -21,6 +15,7 @@ namespace cmdR.UI.Dos
             cmdR.RegisterRoute("cd path", example.ChangeDirectory, "change current directory");
             cmdR.RegisterRoute("ls filter?", example.ListDirectory, "list the contents of the current directory, optionaly specify a filter to search for contents within the directory");
             cmdR.RegisterRoute("del file", example.DeleteFile, "delete the sepcified file");
+            cmdR.RegisterRoute("cls", example.Clear, "Clears the screen.");
 
             // registering a route with a lambda
             cmdR.RegisterRoute("echo text", (parameters, console, state) => console.WriteLine(parameters["text"]), "print the specified text to the console");

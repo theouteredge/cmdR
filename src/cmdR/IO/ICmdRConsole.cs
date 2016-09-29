@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace cmdR.IO
+﻿namespace cmdR.IO
 {
     public interface ICmdRConsole
     {
@@ -14,5 +9,7 @@ namespace cmdR.IO
 
         void WriteLine(string line, params object[] paramters);
         void WriteLine(string line);
+
+        void Clear();
     }
 }

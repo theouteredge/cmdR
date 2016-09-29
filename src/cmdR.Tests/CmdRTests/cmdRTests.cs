@@ -1,11 +1,7 @@
 ﻿using cmdR.CommandParsing;
 using cmdR.IO;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cmdR.Tests.CmdRTests
 {
@@ -335,6 +331,11 @@ namespace cmdR.Tests.CmdRTests
         public void WriteLine(string line)
         {
             ConsoleWindow.Add(string.Format(line));
+        }
+
+        public void Clear()
+        {
+            ConsoleWindow.Clear();
         }
     }
 }

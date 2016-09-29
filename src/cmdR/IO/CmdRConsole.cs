@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace cmdR.IO
 {
@@ -30,6 +27,11 @@ namespace cmdR.IO
         public void WriteLine(string line)
         {
             Console.WriteLine(line);
+        }
+
+        public void Clear()
+        {
+            Console.Clear();
         }
     }
 }

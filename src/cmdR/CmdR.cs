@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using cmdR.Abstract;
 using cmdR.CommandParsing;
 using cmdR.Exceptions;

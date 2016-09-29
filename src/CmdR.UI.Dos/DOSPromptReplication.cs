@@ -1,10 +1,7 @@
 ﻿using cmdR.IO;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cmdR.UI.Dos
 {
@@ -58,6 +55,11 @@ namespace cmdR.UI.Dos
                 File.Delete(_directory + file);
             }
             else console.WriteLine("{0} does not exist", file);
+        }
+
+        public void Clear(IDictionary<string, string> param, ICmdRConsole console, ICmdRState state)
+        {
+            console.Clear();
         }
     }
 }
